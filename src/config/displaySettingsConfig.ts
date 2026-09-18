@@ -21,7 +21,8 @@ export const displaySettingsConfig: DisplaySettingsConfig =
 		// 无需改动本文件：PUBLIC_DISPLAY_SETTINGS=true
 		// 环境变量优先级更高，未设置或取值无法识别时使用这里的值
 		// 生产环境建议默认关闭，只在开发调试环境开启用来预览效果
-		enable: false,
+		// 启明：已开启，导航栏的调色板图标由此控制
+		enable: true,
 
 		// ── 外观 (Appearance) ──────────────────────────────────
 

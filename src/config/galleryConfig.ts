@@ -3,7 +3,8 @@ import type { GalleryConfig } from "@/types/galleryConfig";
 // 相册配置
 export const galleryConfig: GalleryConfig = {
 	// 相册列表
-	albums: [
+	albums: [],
+	/*
 		// 支持jpg/png/webp/avif/gif格式
 		// id: 相册唯一标识符（用于目录命名和URL路径），比如设置：id: "firefly-2026", 对应 public/gallery/firefly-2026/目录
 		// cover: 手动指定封面图（可选，不填会把cover.*文件作为封面图，如果没有cover.*文件，则使用第一张图片作为封面图）
@@ -35,6 +36,7 @@ export const galleryConfig: GalleryConfig = {
 			passwordHint: "示例密码123456",
 		},
 	],
+	*/
 
 	// 瀑布流最小列宽(px)，浏览器根据容器宽度自动计算列数，默认 240
 	// 值越小列数越多，值越大列数越少

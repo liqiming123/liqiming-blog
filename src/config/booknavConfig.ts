@@ -75,9 +75,9 @@ export const booknavConfig: BooknavGroup[] = [
 		weight: 90,
 		items: [
 			{
-				title: "Firefly",
-				url: "https://github.com/CuteLeaf/Firefly",
-				desc: "清晰美观的 Astro 个人博客主题模板",
+				title: "启明的博客",
+				url: "https://liqiming.top/",
+				desc: "AI 资讯与技术实践",
 				icon: "/favicon/firefly-32.png",
 				weight: 10,
 			},
@@ -139,17 +139,10 @@ export const booknavConfig: BooknavGroup[] = [
 		weight: 70,
 		items: [
 			{
-				title: "Firefly Docs",
-				url: "https://docs-firefly.cuteleaf.cn",
-				desc: "Firefly 主题模板文档",
-				icon: "https://docs-firefly.cuteleaf.cn/logo.png",
+				title: "启明 AI 文章",
+				url: "/archive/",
+				desc: "最新 AI 资讯与技术笔记",
 				weight: 10,
-			},
-			{
-				title: "夏夜流萤",
-				url: "https://blog.cuteleaf.cn",
-				desc: "飞萤之火自无梦的长夜亮起",
-				weight: 9,
 			},
 		],
 	},

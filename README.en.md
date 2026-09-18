@@ -1,330 +1,173 @@
-
-<img src="./docs/images/1131.png" width = "350" height = "500" alt="Firefly" align=right />
-
 <div align="center">
 
-# Firefly
-> A Fresh and Beautiful Astro Static Blog Theme Template
-> 
-> ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen) 
-![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D9-blue)
-![Astro](https://img.shields.io/badge/Astro-7-orange)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
->
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
-> 
-> [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
->
-> **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
-> 
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
-[![Afdian Sponsor](https://img.shields.io/badge/Afdian-Sponsor%20Author-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
+<img src="public/favicon/mascot-192.png" width="88" height="88" alt="Qiming Blog logo" />
+
+# Qiming Blog
+
+**AI news, engineering notes, and a record of continuous learning.**
+
+A personal blog customized from Firefly, powered by Astro and Svelte.
+
+[![Astro](https://img.shields.io/badge/Astro-7.3-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/)
+[![Build](https://github.com/liqiming123/liqiming-blog/actions/workflows/build.yml/badge.svg)](https://github.com/liqiming123/liqiming-blog/actions/workflows/build.yml)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+[Live demo](https://liqiming.top) · [Quick start](#quick-start) · [Report an issue](https://github.com/liqiming123/liqiming-blog/issues)
+
+[简体中文](README.md) | **English**
+
 </div>
 
+![Qiming Blog desktop homepage](docs/images/demo/home-desktop.png)
 
----
-📖 README:
-**[简体中文](README.md)** | **[繁體中文](docs/README.zh-TW.md)** | **[English](README.en.md)** | **[日本語](docs/README.ja.md)** | **[한국어](docs/README.ko.md)**
+## About
 
-🚀 Quick Guide:
-[**🖥️Live Demo**](https://firefly.cuteleaf.cn/) /
-[**📝Documentation**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀My Blog**](https://blog.cuteleaf.cn)
+This repository contains the source of [liqiming.top](https://liqiming.top), a personal blog covering AI news and software engineering. Content lives in Markdown / MDX files and is built into static pages. The core blog does not require a database.
 
-⚡ Static Site Generation: Ultra-fast loading speed and SEO optimization based on Astro
+It is a customized version of [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly), which is based on [saicaca / Fuwari](https://github.com/saicaca/fuwari). Customizations include the site's content and visual settings, a self-hosted Artalk frontend, a Live2D chat interface, and RSS / Atom reading improvements.
 
-🎨 Modern Design: Clean and beautiful interface with customizable theme colors
+## Screenshots
 
-📱 Mobile-Friendly: Perfect responsive experience with mobile-specific optimizations
+These are actual browser captures of the production build. The desktop homepage is shown above.
 
-🔧 Highly Configurable: Most features can be customized through configuration files
+<details>
+<summary>Mobile preview (440 px viewport)</summary>
 
-<table width="100%" align="center">
-  <tr>
-    <td colspan="3" align="center">
-      <img src="./docs/images/1.webp" >
-      <br>Banner Mode</td>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"><img src="./docs/images/3.webp" width="300"><br>Overlay Mode</td>
-    <td align="center"><img src="./docs/images/2.webp" width="300"><br>Fullscreen Wallpaper Mode</td>
-    <td align="center"><img src="./docs/images/4.webp" width="300"><br>Solid Color Mode</td>
-  </tr>
-</table>
-<img alt="Lighthouse" src="./docs/images/Lighthouse.png" />
+<p align="center">
+  <img src="docs/images/demo/mobile.png" width="360" alt="Qiming Blog mobile navigation, banner, and articles" />
+</p>
 
->[!TIP]
->
->Firefly is a fresh, beautiful, and modern personal blog theme template based on the Astro framework and the Fuwari template, designed for tech enthusiasts and content creators. It integrates a modern web tech stack, offering rich feature modules and a highly customizable interface so you can easily build a professional and visually appealing personal blog.
->
->**If you refer to or use Firefly component design and related code, please credit Firefly.**
->
->Firefly also preserves the original fuwari layout, which can be freely switched in the configuration file according to your preferences.
->
->**For more layout configurations and demos, please see: [Firefly Layout System Details](https://firefly.cuteleaf.cn/posts/guide/firefly-layout-system/)**
->
->Firefly supports i18n multilingual UI, but except for Simplified Chinese, other languages are AI-translated. If you find any errors, feel free to submit a [Pull Request](https://github.com/CuteLeaf/Firefly/pulls) to help improve them.
+</details>
 
-## ✨ Features
+## Features
 
-### Core Features
+- Markdown / MDX articles, categories, tags, archives, series, and a reading outline.
+- Pagefind search with a build-time index and browser-side queries.
+- Light / dark themes, configurable colors, rotating wallpapers, sidebars, and responsive layouts.
+- Short updates, projects, galleries, bookmarks, friend links, and a guestbook.
+- Svelte interactions, Swup navigation, immersive reading, and a Live2D mascot.
+- Optional Artalk comments and streaming AI chat through your own server proxy.
+- RSS / Atom feeds, a sitemap, Open Graph images, image placeholders, and asset optimization.
 
-- [x] **Astro + Tailwind CSS** - Ultra-fast static site generation based on modern tech stack
-- [x] **Smooth Animations** - Swup page transition animations for silky smooth browsing experience
-- [x] **Responsive Design** - Perfect adaptation for desktop, tablet and mobile devices
-- [x] **Multi-language Support** - i18n internationalization ui, supports Simplified Chinese, Traditional Chinese, English, Japanese, Russian, Korean
-- [x] **Full-text Search** - Client-side search based on Pagefind, supports article content indexing.
+## Technology
 
-### Personalization
-- [x] **Dynamic Sidebar** - Supports single sidebar, dual sidebar configuration
-- [x] **Article Layout** - Supports list (single column) and grid (multi-column/masonry) layout
-- [x] **Font Management** - Custom font support with rich font selector
-- [x] **Footer Configuration** - HTML content injection, fully customizable
-- [x] **Light/Dark Mode** - Supports light/dark/system three modes
-- [x] **Navbar Customization** - Logo, title, links fully customizable
-- [x] **Wallpaper Mode Switching** - Banner wallpaper, fullscreen wallpaper, fullscreen transparent wallpaper, solid background
-- [x] **Theme Color Customization** - 360° hue adjustment
+| Technology | Role |
+| --- | --- |
+| Astro 7.3.2 | Routing, content collections, static generation, and images |
+| Svelte 5 + TypeScript 6 | Interactive components and typed configuration |
+| Tailwind CSS 4 + Stylus | Responsive layout and styling |
+| Markdown / MDX + remark / rehype | Authoring and content transformations |
+| Expressive Code + KaTeX | Code blocks and math |
+| Pagefind + Swup | Search and page transitions |
+| Artalk 2.10.0 + Live2D / Pio | Comment frontend and mascot interactions |
+| pnpm + Biome + GitHub Actions | Dependencies, formatting, checks, and builds |
 
+See [package.json](package.json) and [pnpm-lock.yaml](pnpm-lock.yaml) for exact dependencies.
 
-If you have useful features and optimizations, please submit a [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
+## Quick start
 
-## 🚀 Quick Start
-
-### Requirements
-
-- Node.js ≥ 22
-- pnpm ≥ 11
-
-### Local Development
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Cuteleaf/Firefly.git
-   cd Firefly
-   ```
-   
-   **First [Fork](https://github.com/CuteLeaf/Firefly/fork) to your own repository then clone (recommended). Don't forget to Star before Fork!**
-
-   ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
-   ```
-3. **Install dependencies:**
-   ```bash
-   # Install pnpm if not installed
-   npm install -g pnpm
-   
-   # Install project dependencies
-   pnpm install
-   ```
-
-4. **Configure blog:**
-   - Edit configuration files in `src/config/` directory to customize blog settings
-
-5. **Start development server:**
-   ```bash
-   pnpm dev
-   ```
-   Blog will be available at `http://localhost:4321`
-
-### Platform Hosting Deployment
-- **Refer to the [official guide](https://docs.astro.build/en/guides/deploy/) to deploy your blog to Vercel, Netlify, Cloudflare Pages, EdgeOne Pages, etc.**
-- **Vercel**, **Netlify** and other major platforms auto-deploy, automatically selecting the appropriate adapter based on the environment.
-
-   Framework Preset: `Astro`
-
-   Root Directory: `./`
-
-   Output Directory: `dist`
-
-   Build Command: `pnpm run build`
-
-   Install Command: `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
-
-## 📖 Configuration
-
-> 📚 **Detailed Configuration Documentation**: Check [Firefly Documentation](https://docs-firefly.cuteleaf.cn/) for complete configuration guide
-
-### Setting Website Language
-
-To set the default language for your blog, edit the `src/config/siteConfig.ts` file:
-
-```typescript
-// Define site language
-const SITE_LANG = "zh_CN";
-```
-
-**Supported language codes:**
-- `zh_CN` - Simplified Chinese
-- `zh_TW` - Traditional Chinese
-- `en` - English
-- `ja` - Japanese
-- `ru` - Russian
-- `ko` - Korean
-
-### Configuration File Structure
-
-```
-src/
-├── config/
-│   ├── index.ts                  # Configuration index file
-│   ├── siteConfig.ts             # Site basic configuration
-│   ├── analyticsConfig.ts        # Analytics configuration
-│   ├── announcementConfig.ts     # Announcement configuration
-│   ├── backgroundWallpaper.ts    # Background wallpaper configuration
-│   ├── commentConfig.ts          # Comment system configuration
-│   ├── coverImageConfig.ts       # Cover image configuration
-│   ├── displaySettingsConfig.ts  # Settings panel configuration
-│   ├── dynamicConfig.ts          # Moments page configuration
-│   ├── effectsConfig.ts          # Animation effects config (sakura, etc.)
-│   ├── expressiveCodeConfig.ts   # Code highlighting configuration
-│   ├── fontConfig.ts             # Font configuration
-│   ├── FooterConfig.html           # Footer configuration
-│   ├── friendsConfig.ts          # Friend links configuration
-│   ├── galleryConfig.ts          # Gallery configuration
-│   ├── licenseConfig.ts          # License configuration
-│   ├── musicConfig.ts            # Music player configuration
-│   ├── navBarConfig.ts           # Navbar configuration
-│   ├── pioConfig.ts              # Mascot configuration
-│   ├── mermaidConfig.ts          # Mermaid diagram configuration
-│   ├── plantumlConfig.ts         # PlantUML diagram configuration
-│   ├── profileConfig.ts          # User profile configuration
-│   ├── sidebarConfig.ts          # Sidebar layout configuration
-│   └── sponsorConfig.ts          # Sponsor configuration
-```
-
-
-## ⚙️ Article Frontmatter
-
-```yaml
----
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg  # Or use "api" to enable random cover images
-tags: [Foo, Bar]
-category: Front-end
-draft: false
-lang: zh-CN      # Only set when article language differs from site language in `siteConfig.ts`
-pinned: false    # Pin article
-comment: true    # Enable comments
----
-```
-
-## Moments
-
-Moment files are stored in `src/content/dynamic/`, with one Markdown file per moment. Create one with:
+Requirements: **Node.js >= 22.23.0** (Node.js 24 recommended), **pnpm 11.22.0**, and Git if cloning.
 
 ```bash
-pnpm new-d The weather is lovely today
+npm install --global pnpm@11.22.0
+git clone https://github.com/liqiming123/liqiming-blog.git
+cd liqiming-blog
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-`pnpm new-dynamic <content>` is the equivalent full command.
+Open **http://localhost:4321**, or the URL printed by Astro if that port is occupied. Alternatively, [download the ZIP](https://github.com/liqiming123/liqiming-blog/archive/refs/heads/main.zip), extract it, and run the install and dev commands from the directory containing `package.json`.
 
-```yaml
----
-published: 2026-07-15 16:15:29
-pinned: true  # Pin article
-location: China # Location
----
+No `.env` file or API key is required for the core blog. Installing dependencies requires an internet connection.
 
-Moment content supports Markdown.
+To check and preview the production build:
+
+```bash
+pnpm check
+pnpm type-check
+pnpm build
+pnpm preview
 ```
 
-Also supports [Memos](https://www.usememos.com/) as a data source. Configure the `memos` option in `src/config/dynamicConfig.ts` to fetch Memos moments in real-time, with pinned sync and image attachment support. See [Moments documentation](https://docs-firefly.cuteleaf.cn/en/guide/dynamic.html).
+Use the complete `pnpm build` command: it includes asset pruning, font subsetting, inline script compression, and the Pagefind index. Running only `astro build` skips these post-processing steps. Test full-text search using the production preview.
 
-## 📖 Markdown Extensions
+## Commands
 
-In addition to the default [GitHub Flavored Markdown](https://github.github.com/gfm/) support in Astro, there are some additional Markdown features:
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm check` | Astro / Svelte diagnostics |
+| `pnpm type-check` | TypeScript checks |
+| `pnpm build` | Generate the complete site in `dist/` |
+| `pnpm preview` | Preview the production build |
+| `pnpm new-post my-first-post` | Create a Markdown article |
+| `pnpm new-dynamic "A short update"` | Create a timestamped update |
+| `pnpm format` | Format source and scripts; modifies files |
+| `pnpm lint` | Run Biome with safe fixes; modifies files |
 
-- Admonitions - Supports configuration for GitHub, Obsidian, VitePress, and Docusaurus themes ([Preview and Usage](https://firefly.cuteleaf.cn/posts/markdown-extended/))
-- GitHub Repository Cards ([Preview and Usage](https://firefly.cuteleaf.cn/posts/markdown-extended/))
-- Enhanced Code Blocks based on Expressive Code ([Preview](http://firefly.cuteleaf.cn/posts/code-examples/) / [Documentation](https://expressive-code.com/))
+## Configuration
 
-## 🧞 Commands
+Configuration lives in `src/config/` and is exported through `src/config/index.ts`.
 
-All commands need to be executed in the project root directory:
+| File | Configure |
+| --- | --- |
+| `siteConfig.ts` | Title, domain, language, colors, page switches, favicon |
+| `profileConfig.ts` | Avatar, bio, social links |
+| `navBarConfig.ts` | Navigation |
+| `backgroundWallpaper.ts` | Homepage headline, wallpapers, carousel |
+| `sidebarConfig.ts` | Sidebar and layout |
+| `commentConfig.ts` | Comments and backend URL |
+| `pioConfig.ts` | Mascot, menus, AI chat |
 
-| Command                    | Action                                              |
-|:---------------------------|:----------------------------------------------------|
-| `pnpm install`             | Install dependencies                                |
-| `pnpm dev`                 | Start local development server at `localhost:4321`  |
-| `pnpm build`               | Build site to `./dist/`                             |
-| `pnpm preview`             | Preview built site locally                          |
-| `pnpm check`               | Check for errors in code                            |
-| `pnpm format`              | Format your code using Biome                        |
-| `pnpm new-post <filename>` | Create new article                                  |
-| `pnpm new-d <content>`     | Create a new moment                                 |
-| `pnpm new-dynamic <content>` | Create a new moment (full command)                |
-| `pnpm astro ...`           | Execute `astro add`, `astro check` and other commands |
-| `pnpm astro --help`        | Display Astro CLI help                              |
+Write articles in `src/content/posts/`, short updates in `src/content/dynamic/`, and project entries in `src/content/projects/`.
 
-## 🙏 Acknowledgments
+### Optional backend services
 
-Special thanks to [saicaca](https://github.com/saicaca) for developing the [fuwari](https://github.com/saicaca/fuwari) template, which Firefly is based on for secondary development.
+This repository includes the frontend and integration notes. It does **not** include the production comment database, AI proxy implementation, or service credentials.
 
-The copyright of Firefly-related image assets belongs to [miHoYo](https://www.mihoyo.com/), the developer of the game ["Honkai: Star Rail"](https://sr.mihoyo.com/).
+- **Comments:** set `commentConfig.type` to `"none"` for a frontend-only preview. Otherwise, configure your own Artalk server and match its site name to `siteConfig.title`.
+- **AI chat:** set `live2dWidgetConfig.chat.enable` to `false` to keep the mascot without AI. Otherwise, point `chat.apiEndpoint` at your own compatible proxy.
+- **API keys:** keep keys on the server. Leave frontend `chat.apiKey` empty; values in static-site config can appear in generated HTML.
 
-### Tech Stack
+The checked-in settings reflect the live site. Its public backend endpoints are not intended as shared services for other domains or localhost.
 
-- [Astro](https://astro.build) 
-- [Tailwind CSS](https://tailwindcss.com) 
-- [Iconify](https://iconify.design)
+Integration notes: [Artalk](docs/artalk-frontend.md) · [AI proxy](docs/mascot-chat-proxy.md).
 
-### Inspiration Projects
+## Structure
 
-- [fuwari](https://github.com/saicaca/fuwari)
-- [hexo-theme-shoka](https://github.com/amehime/hexo-theme-shoka)
-- [astro-koharu](https://github.com/cosZone/astro-koharu)
-- [Mizuki](https://github.com/matsuzaka-yuki/Mizuki)
+```text
+src/
+  assets/       Source images
+  components/   Astro and Svelte components
+  config/       Feature configuration
+  content/      Articles, updates, projects, pages
+  layouts/      Shared layouts
+  pages/        Routes and feed endpoints
+  plugins/      Markdown and HTML plugins
+  styles/       Stylesheets
+  types/        Type definitions
+  utils/        Utilities
+public/         Static assets, Artalk frontend, mascot models
+scripts/        Authoring and build helpers
+docs/           Screenshots and deployment notes
+.github/        CI and issue templates
+```
 
-### Other References
-- Blogger `霞葉` [Bangumi Collection](https://kasuha.com/posts/fuwari-enhance-ep2/) page component
-- Bilibili creator `公公的日常` Q-version [Firefly Mascot Spine Model](https://www.bilibili.com/video/BV1fuVzzdE5y)
+## Deployment
 
-## 📝 License
+Build with `pnpm build` and serve the contents of `dist/` from a static host. Set the install command to `pnpm install --frozen-lockfile` and use Node.js 24.
 
-This project is licensed under the [MIT license](https://mit-license.org/). See the [LICENSE](./LICENSE) file for details.
+Update `siteConfig.site_url` before deploying your own site. The default Astro `base` is `/`; subdirectory deployments need corresponding path configuration and verification.
 
-Originally forked from [saicaca/fuwari](https://github.com/saicaca/fuwari). Thanks to the original author for their contributions. 
+CI runs diagnostics, TypeScript checks, and the complete build on `main`. The GitHub Pages workflow is manual and requires Pages configuration. See the [deployment guide](docs/deploy.md).
 
-**Copyright Notice:**
-- Copyright (c) 2024 [saicaca](https://github.com/saicaca) - [fuwari](https://github.com/saicaca/fuwari)
-- Copyright (c) 2025 [CuteLeaf](https://github.com/CuteLeaf) - [Firefly](https://github.com/CuteLeaf/Firefly)
+## Contributing
 
-Under the MIT license, you are free to use, modify, and distribute the code, but you must retain the above copyright notice.
+Issues and focused pull requests are welcome. Include reproduction steps, environment details, and screenshots for UI problems. Run `pnpm check`, `pnpm type-check`, and `pnpm build` before submitting. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 🍀 Contributors
+## Credits and license
 
-Thanks to the following contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/CuteLeaf/Firefly/issues) or [Pull Request](https://github.com/CuteLeaf/Firefly/pulls).
+Built on [Firefly](https://github.com/CuteLeaf/Firefly) and [Fuwari](https://github.com/saicaca/fuwari). The Live2D integration uses runtime/model resources from Mizuki / Pio. Thanks to the maintainers of Astro, Svelte, Pagefind, Artalk, and all other dependencies.
 
-><a href="https://github.com/CuteLeaf/Firefly/graphs/contributors">
->  <img src="https://contrib.rocks/image?repo=CuteLeaf/Firefly" />
-></a>
-
-Thanks to the following contributors for their contributions to the original project [fuwari](https://github.com/saicaca/fuwari), which laid the foundation for this project.
-
-><a href="https://github.com/saicaca/fuwari/graphs/contributors">
->  <img src="https://contrib.rocks/image?repo=saicaca/fuwari" />
-></a>
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=CuteLeaf/Firefly&type=Date)](https://star-history.com/#CuteLeaf/Firefly&Date)
-
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+The code retains the [MIT License](LICENSE) and upstream copyright notices. Articles, quoted material, wallpapers, fonts, music, and mascot models retain their respective licenses and attribution requirements; the code license does not grant separate rights to those assets.

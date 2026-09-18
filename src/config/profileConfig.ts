@@ -9,10 +9,10 @@ export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.avif",
 
 	// 名字
-	name: "XiaYe",
+	name: "启明",
 
 	// 个人签名
-	bio: "Hello, I'm XiaYe.",
+	bio: "记录 AI 资讯、技术实践与持续学习。",
 
 	// 链接配置
 	// 已经预装的图标集：fa7-brands，fa7-regular，fa7-solid，material-symbols，simple-icons
@@ -24,25 +24,26 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa7-brands:github",
-			url: "https://github.com/CuteLeaf",
+			url: "https://github.com/liqiming123",
 			showName: false,
 		},
 		{
-			name: "Email",
+			// 以 mailto: 开头时，组件会自动编码再在点击时解码，避免明文邮箱被垃圾邮件爬取
+			name: "QQ 邮箱",
 			icon: "fa7-solid:envelope",
-			url: "mailto:xiaye@msn.com",
+			url: "mailto:2910739229@qq.com",
+			showName: false,
+		},
+		{
+			name: "启明 AI 应用生成平台",
+			icon: "material-symbols:auto-awesome",
+			url: "https://ai.liqiming.top/",
 			showName: false,
 		},
 		{
 			name: "RSS",
 			icon: "fa7-solid:rss",
 			url: "/rss/",
-			showName: false,
-		},
-		{
-			name: "Atom",
-			icon: "fa7-solid:atom",
-			url: "/atom/",
 			showName: false,
 		},
 	],

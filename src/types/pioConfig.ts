@@ -32,7 +32,35 @@ export type SpineModelConfig = {
 	opacity?: number; // 透明度，0-1，默认1.0
 };
 
-// Live2D 看板娘配置 (使用 l2d-widget)
+// Live2D 看板娘 AI 聊天配置
+// 接口按 OpenAI 兼容格式调用（POST {apiEndpoint}，Bearer 鉴权，{model, messages, stream}），
+// 因此 DeepSeek / OpenAI / 智谱 / Moonshot 以及自建的 one-api、new-api、Ollama 都能直接用。
+export type Live2DChatConfig = {
+	enable: boolean; // 是否启用「点击看板娘弹出聊天框」
+	apiEndpoint: string; // 对话接口地址，OpenAI 兼容
+	apiKey?: string; // 留空则读环境变量 PUBLIC_MASCOT_CHAT_API_KEY
+	model: string; // 模型名
+	systemPrompt?: string; // 人格设定，决定看板娘怎么说话
+	temperature?: number; // 采样温度，默认 0.8
+	maxTokens?: number; // 单次回复最大 token 数，默认 800
+	stream?: boolean; // SSE 流式输出，默认 true
+	keepContext?: boolean; // 同一次对话内是否把前几轮带给模型（仅内存，不落盘），默认 true
+	maxContextMessages?: number; // 上行最多带几条历史消息，默认 6
+	requestTimeout?: number; // 请求超时（ms），默认 60000
+	ui?: {
+		panelOpacity?: number; // 面板背景不透明度 0~1，0 = 全透明，默认 0
+		panelBlur?: number; // 面板背景模糊（px），透明背景下靠它保证文字可读，默认 10
+		width?: string; // 面板宽度，默认 "19rem"
+		title?: string; // 面板标题
+		greeting?: string; // 打开面板时的开场白
+		placeholder?: string; // 输入框占位文字
+		sendLabel?: string; // 发送按钮文字
+		loadingText?: string; // 等待回复时的占位文字
+		errorText?: string; // 请求失败时的提示文字
+	};
+};
+
+// Live2D 看板娘配置（Pio 运行时）
 export type Live2DWidgetConfig = {
 	enable: boolean; // 是否启用 Live2D 看板娘
 	model:
@@ -68,6 +96,7 @@ export type Live2DWidgetConfig = {
 			maxValue?: number; // 嘴型开合最大值（0-1），默认 1
 		};
 	};
+	chat?: Live2DChatConfig; // 点击看板娘弹出的 AI 聊天配置
 	responsive?: {
 		hideOnMobile?: boolean; // 是否在移动端隐藏
 		mobileBreakpoint?: number; // 移动端断点，默认 768

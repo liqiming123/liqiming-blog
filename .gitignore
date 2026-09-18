@@ -18,7 +18,8 @@ pnpm-debug.log*
 
 # environment variables
 .env
-.env.production
+.env.*
+!.env.example
 
 # macOS-specific files
 .DS_Store
@@ -47,3 +48,10 @@ package/
 .codex*
 .claude
 .mimocode
+
+# private keys and local deployment notes
+*.pem
+*.key
+*.p12
+*.pfx
+docs/private/

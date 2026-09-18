@@ -1,329 +1,260 @@
-
-<img src="./docs/images/1131.png" width = "350" height = "500" alt="Firefly" align=right />
-
 <div align="center">
 
-# 流萤 / Firefly 
-> 一款清新美观的 Astro 静态博客主题模板
-> 
-> ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen) 
-![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D9-blue)
-![Astro](https://img.shields.io/badge/Astro-7-orange)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
->
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
-> 
-> [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
->
-> **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
-> 
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
-[![爱发电打赏](https://img.shields.io/badge/爱发电-打赏作者-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
+<img src="public/favicon/mascot-192.png" width="88" height="88" alt="启明的博客 Logo" />
+
+# 启明的博客
+
+**记录 AI 资讯、技术实践与持续学习。**
+
+基于 Firefly 定制的个人博客 · Astro 静态生成 · Svelte 交互组件
+
+[![Astro](https://img.shields.io/badge/Astro-7.3-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Build](https://github.com/liqiming123/liqiming-blog/actions/workflows/build.yml/badge.svg)](https://github.com/liqiming123/liqiming-blog/actions/workflows/build.yml)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/liqiming123/liqiming-blog?style=flat)](https://github.com/liqiming123/liqiming-blog/stargazers)
+
+[在线演示](https://liqiming.top) · [快速开始](#快速开始) · [配置指南](#配置指南) · [问题反馈](https://github.com/liqiming123/liqiming-blog/issues)
+
+**简体中文** | [English](README.en.md)
 
 </div>
 
+![启明的博客：桌面端首页](docs/images/demo/home-desktop.png)
 
----
-📖 README：
-**[简体中文](README.md)** | **[繁體中文](docs/README.zh-TW.md)** | **[English](README.en.md)** | **[日本語](docs/README.ja.md)** | **[한국어](docs/README.ko.md)**
+## 关于项目
 
-🚀 快速指南：
-[**🖥️在线预览**](https://firefly.cuteleaf.cn/) /
-[**📝使用文档**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀我的博客**](https://blog.cuteleaf.cn) 
+这是 [liqiming.top](https://liqiming.top) 的博客源码，用于发布 AI 资讯、软件工程笔记和个人动态，也可以作为搭建个人技术博客的参考。文章保存在 Markdown / MDX 文件中，构建后生成静态页面，不需要数据库即可浏览文章、归档和项目页。
 
-⚡ 静态站点生成: 基于 Astro 的超快加载速度和 SEO 优化
+项目基于 [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) 二次开发，保留主题的配置能力，并加入本站的内容、视觉设置、Artalk 自托管前端、Live2D 对话界面和 RSS / Atom 阅读体验调整。Firefly 的上游为 [saicaca / Fuwari](https://github.com/saicaca/fuwari)。
 
-🎨 现代化设计: 简洁美观的界面，支持自定义主题色
+## 演示截图
 
-📱 移动友好: 完美的响应式体验，移动端专项优化
+以下为本项目生产构建的真实截图，展示桌面首页和移动端布局。桌面截图见上方，点击图片可查看原图。
 
-🔧 高度可配置: 大部分功能模块均可通过配置文件自定义
+<details>
+<summary>查看移动端演示（440 px 视口）</summary>
 
-<table width="100%" align="center">
-  <tr>
-    <td colspan="3" align="center">
-      <img src="./docs/images/1.webp" >
-      <br>横幅模式</td>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"><img src="./docs/images/3.webp" width="300"><br>透明覆盖模式</td>
-    <td align="center"><img src="./docs/images/2.webp" width="300"><br>全屏壁纸模式</td>
-    <td align="center"><img src="./docs/images/4.webp" width="300"><br>纯色模式</td>
-  </tr>
-</table>
-<img alt="Lighthouse" src="./docs/images/Lighthouse.png" />
+<p align="center">
+  <img src="docs/images/demo/mobile.png" width="360" alt="启明博客移动端：导航、横幅与文章列表" />
+</p>
 
->[!TIP]
->
->Firefly 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
->
->**如果你参考或使用了 Firefly 的组件设计和相关代码，请注明来自 Firefly。**
->
->Firefly 也保留了原版 fuwari 的布局，可根据自己的喜好在配置文件中自由切换。
->
->**更多布局配置及演示请查看：[Firefly 布局系统详解](https://firefly.cuteleaf.cn/posts/guide/firefly-layout-system/)**
->
->Firefly 支持 i18n 多语言 UI，但除了简体中文，其他语言均为 AI 翻译转换，如有错误，欢迎提交 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls) 修正。
+</details>
 
-## ✨ 功能特性
+## 功能特性
 
-### 核心功能
+- **内容优先**：Markdown / MDX 写作，文章分类、标签、时间归档、系列文章与阅读目录。
+- **全文搜索**：Pagefind 在构建阶段生成索引，浏览器端搜索文章，无需搜索服务。
+- **个性化外观**：明暗主题、主题色、壁纸轮播、侧栏与文章布局配置，支持移动端响应式布局。
+- **个人内容空间**：动态、项目展示、相册、书签导航、友链、关于页与留言板。
+- **交互体验**：Svelte 组件、Swup 页面过渡、沉浸式阅读与 Live2D 看板娘。
+- **评论与 AI 对话**：自托管 Artalk 前端；看板娘支持流式对话、短期上下文和 OpenAI 兼容格式的服务端代理。
+- **内容分发**：RSS / Atom、站点地图、Open Graph 图片及搜索引擎元信息。
+- **构建优化**：图片低清占位、按配置裁剪看板娘资源、字体子集化和内联脚本压缩。
 
-- [x] **Astro + Tailwind CSS** - 基于现代技术栈的超快静态站点生成
-- [x] **流畅动画** - Swup 页面过渡动画，提供丝滑的浏览体验
-- [x] **响应式设计** - 完美适配桌面端、平板和移动设备
-- [x] **多语言支持** - i18n 国际化，UI 支持简体中文、繁体中文、英文、日文、俄语、韩文
-- [x] **全文搜索** - 基于 Pagefind 的客户端搜索，支持文章内容索引
+> 博客主体可独立运行。评论和 AI 对话依赖另外部署的服务；本仓库包含前端与接入说明，不包含线上数据库、AI 代理程序或任何服务密钥。具体配置见[可选后端服务](#可选后端服务)。
 
-### 个性化
-- [x] **动态侧边栏** - 支持配置单侧边栏、双侧边栏
-- [x] **文章布局** - 支持配置(单列)列表、网格(多列/瀑布流)布局
-- [x] **字体管理** - 支持自定义字体，丰富的字体选择器
-- [x] **页脚配置** - HTML 内容注入，完全自定义
-- [x] **亮暗色模式** - 支持亮色/暗色/跟随系统三种模式
-- [x] **导航栏自定义** - Logo、标题、链接全面自定义
-- [x] **壁纸模式切换** - 横幅壁纸、全屏壁纸、全屏透明壁纸、纯色背景
-- [x] **主题色自定义** - 360° 色相调节
+## 技术栈
 
-如果你有好用的功能和优化，请提交 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
+版本以 [package.json](package.json) 和 [pnpm-lock.yaml](pnpm-lock.yaml) 为准。
 
-## 🚀 快速开始
+| 技术 | 项目中的用途 |
+| --- | --- |
+| Astro 7.3.2 | 文件路由、内容集合、静态页面生成、图片处理 |
+| Svelte 5 | 搜索、主题设置、筛选等交互组件 |
+| TypeScript 6 | 配置、内容处理与组件的类型约束 |
+| Tailwind CSS 4 + Stylus | 响应式布局、主题变量与组件样式 |
+| Markdown / MDX + remark / rehype | 文章写作、扩展语法、链接与内容转换 |
+| Expressive Code + KaTeX | 代码块展示与数学公式 |
+| Pagefind | 构建时索引与浏览器端全文搜索 |
+| Swup | 页面切换与过渡效果 |
+| Artalk 2.10.0 | 自托管评论前端，后端单独部署 |
+| Live2D / Pio | 看板娘模型、动作与交互菜单 |
+| Biome + pnpm + GitHub Actions | 格式化、依赖管理、类型检查与生产构建 |
 
-### 环境要求
-
-- Node.js ≥ 22
-- pnpm ≥ 11
-
-### 本地开发部署
-
-1. **克隆仓库：**
-   ```bash
-   git clone https://github.com/Cuteleaf/Firefly.git
-   cd Firefly
-   ```
-   
-   **先 [Fork](https://github.com/CuteLeaf/Firefly/fork) 到自己仓库再克隆（推荐），记得先点 Star 再 Fork 哦！**
-
-   ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
-   ```
-3. **安装依赖：**
-   ```bash
-   # 如果没有安装 pnpm，先安装
-   npm install -g pnpm
-   
-   # 安装项目依赖
-   pnpm install
-   ```
-
-4. **配置博客：**
-   - 编辑 `src/config/` 目录下的配置文件自定义博客设置
-
-5. **启动开发服务器：**
-   ```bash
-   pnpm dev
-   ```
-   博客将在 `http://localhost:4321` 可用
-
-### 平台托管部署
-- **参考[官方指南](https://docs.astro.build/zh-cn/guides/deploy/)将博客部署至 Vercel, Netlify, Cloudflare Pages, EdgeOne Pages 等。**
-- **Vercel**、**Netlify** 等主流平台自动部署，会根据环境自动选择适配器。
-
-   框架预设： `Astro`
-
-   根目录： `./`
-
-   输出目录： `dist`
-
-   构建命令： `pnpm run build`
-
-   安装命令： `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
-
-## 📖 配置说明
-
-> 📚 **详细配置文档**: 查看 [Firefly 使用文档](https://docs-firefly.cuteleaf.cn/) 获取完整的配置指南
-
-### 设置网站语言
-
-要设置博客的默认语言，请编辑 `src/config/siteConfig.ts` 文件：
-
-```typescript
-// 定义站点语言
-const SITE_LANG = "zh_CN";
+```mermaid
+flowchart LR
+    A[Markdown / MDX 内容] --> C[Astro 构建]
+    B[TypeScript 配置 + Svelte 组件] --> C
+    C --> D[静态页面与资源]
+    D --> E[资源裁剪与压缩]
+    E --> F[Pagefind 搜索索引]
+    F --> G[dist 静态站点]
+    G --> H[浏览器]
+    H -. 可选 .-> I[Artalk 评论服务]
+    H -. 可选 .-> J[AI 服务端代理]
 ```
 
-**支持的语言代码：**
-- `zh_CN` - 简体中文
-- `zh_TW` - 繁体中文
-- `en` - 英文
-- `ja` - 日文
-- `ru` - 俄文
-- `ko` - 韩文
+## 快速开始
 
-### 配置文件结构
+### 1. 准备环境
 
-```
-src/
-├── config/
-│   ├── index.ts                  # 配置索引文件
-│   ├── siteConfig.ts             # 站点基础配置
-│   ├── analyticsConfig.ts        # 统计分析配置
-│   ├── announcementConfig.ts     # 公告配置
-│   ├── backgroundWallpaper.ts    # 背景壁纸配置
-│   ├── commentConfig.ts          # 评论系统配置
-│   ├── coverImageConfig.ts       # 封面图配置
-│   ├── displaySettingsConfig.ts  # 设置面板配置
-│   ├── dynamicConfig.ts          # 动态页面配置
-│   ├── effectsConfig.ts          # 动画特效配置（樱花等）
-│   ├── expressiveCodeConfig.ts   # 代码高亮配置
-│   ├── fontConfig.ts             # 字体配置
-│   ├── FooterConfig.html           # 页脚配置
-│   ├── friendsConfig.ts          # 友链配置
-│   ├── galleryConfig.ts          # 相册配置
-│   ├── licenseConfig.ts          # 许可证配置
-│   ├── musicConfig.ts            # 音乐播放器配置
-│   ├── navBarConfig.ts           # 导航栏配置
-│   ├── pioConfig.ts              # 看板娘配置
-│   ├── mermaidConfig.ts          # Mermaid 图表配置
-│   ├── plantumlConfig.ts         # PlantUML 图表配置
-│   ├── profileConfig.ts          # 用户资料配置
-│   ├── sidebarConfig.ts          # 侧边栏布局配置
-│   └── sponsorConfig.ts          # 打赏配置
-```
-
-## ⚙️ 文章 Frontmatter
-
-```yaml
----
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg  # 或使用 "api" 来启用随机封面图
-tags: [Foo, Bar]
-category: Front-end
-draft: false
-lang: zh-CN      # 仅当文章语言与 `siteConfig.ts` 中的网站语言不同时需要设置
-pinned: false    # 置顶
-comment: true    # 是否允许评论
----
-```
-
-## 动态
-
-动态文件保存在 `src/content/dynamic/` 中，一个 Markdown 文件对应一条动态。可以使用快捷命令创建：
+- **Node.js ≥ 22.23.0**，建议使用 Node.js 24。
+- **pnpm 11.22.0**，与项目的 `packageManager` 一致。
+- 使用 Git 克隆时需要安装 Git；也可以直接下载 ZIP。
 
 ```bash
-pnpm new-d 今天心情不错，出去吃了一顿火锅
+node --version
+npm install --global pnpm@11.22.0
+pnpm --version
 ```
 
-`pnpm new-dynamic <content>` 也可以使用，和 `new-d` 完全等价。
+### 2. 下载项目
+
+```bash
+git clone https://github.com/liqiming123/liqiming-blog.git
+cd liqiming-blog
+```
+
+不使用 Git 时，可[下载源码 ZIP](https://github.com/liqiming123/liqiming-blog/archive/refs/heads/main.zip)，解压后在含 `package.json` 的目录打开终端。
+
+### 3. 安装并启动
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+打开 **http://localhost:4321**。端口被占用时，以终端输出的地址为准。首次安装需要联网下载依赖；基础页面不要求 `.env` 文件或 API Key。
+
+### 4. 验证生产效果
+
+```bash
+pnpm check
+pnpm type-check
+pnpm build
+pnpm preview
+```
+
+打开预览命令输出的地址，通常仍为 **http://localhost:4321**。完整搜索索引在 `pnpm build` 后生成，测试全文搜索请使用构建后的预览。
+
+> 请使用完整的 `pnpm build`。只执行 `astro build` 会跳过后续资源处理和 Pagefind 索引生成，导致部署后的搜索无法正常工作。
+
+## 常用命令
+
+| 命令 | 说明 |
+| --- | --- |
+| `pnpm dev` | 启动开发服务器，修改内容后自动更新 |
+| `pnpm check` | 检查 Astro、Svelte 和 TypeScript 诊断 |
+| `pnpm type-check` | TypeScript 类型检查 |
+| `pnpm build` | 完整生产构建，输出到 `dist/` |
+| `pnpm preview` | 本地预览已有生产构建 |
+| `pnpm new-post my-first-post` | 新建 `src/content/posts/my-first-post.md` |
+| `pnpm new-dynamic "今天的开发记录"` | 新建一条带时间戳的动态 |
+| `pnpm format` | 格式化 `src/` 和 `scripts/`，会修改文件 |
+| `pnpm lint` | Biome 检查并应用安全修复，会修改文件 |
+
+## 配置指南
+
+配置集中在 `src/config/`，由 `src/config/index.ts` 统一导出。搭建自己的站点时，先替换站点地址、个人资料、文章内容和第三方服务地址。
+
+| 想修改的内容 | 文件 |
+| --- | --- |
+| 标题、域名、语言、主题色、页面开关、站点图标 | [`src/config/siteConfig.ts`](src/config/siteConfig.ts) |
+| 头像、昵称、个人简介和社交链接 | [`src/config/profileConfig.ts`](src/config/profileConfig.ts) |
+| 导航栏与页面入口 | [`src/config/navBarConfig.ts`](src/config/navBarConfig.ts) |
+| 首页标题、壁纸与轮播 | [`src/config/backgroundWallpaper.ts`](src/config/backgroundWallpaper.ts) |
+| 侧栏与布局 | [`src/config/sidebarConfig.ts`](src/config/sidebarConfig.ts) |
+| 评论提供商和后端地址 | [`src/config/commentConfig.ts`](src/config/commentConfig.ts) |
+| Live2D 模型、菜单和 AI 聊天 | [`src/config/pioConfig.ts`](src/config/pioConfig.ts) |
+| 友链、相册、书签、打赏 | `friendsConfig.ts`、`galleryConfig.ts`、`booknavConfig.ts`、`sponsorConfig.ts` |
+
+### 写一篇文章
+
+```bash
+pnpm new-post my-first-post
+```
+
+编辑新生成的 Markdown 文件，例如：
 
 ```yaml
 ---
-published: 2026-07-15 16:15:29
-pinned: true  # 置顶
-location: China # 位置
+title: 我的第一篇技术笔记
+published: 2026-09-18
+description: 记录一次可复现的工程实践。
+tags: [Astro, 开发记录]
+category: 技术笔记
+slug: my-first-post
+draft: false
 ---
-
-动态内容可以使用 Markdown 语法。
 ```
 
-也支持对接 [Memos](https://www.usememos.com/) 作为数据源，在 `src/config/dynamicConfig.ts` 中配置 `memos` 选项即可实时获取 Memos 动态，支持置顶同步和图片附件展示。详见[动态文档](https://docs-firefly.cuteleaf.cn/zh/guide/dynamic.html)。
+在 Frontmatter 下方写正文即可。设置 `draft: true` 可将文章标记为草稿。
 
-## 🧩 Markdown 扩展语法
+### 可选后端服务
 
-除了 Astro 默认支持的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 之外，还包含了一些额外的 Markdown 功能：
+| 功能 | 本地体验 / 自行部署时如何处理 |
+| --- | --- |
+| Artalk 评论 | 仅浏览文章时可将 `commentConfig.type` 设为 `"none"`；启用评论时替换 `artalk.server` 为自己的服务地址，并让后端站点名与 `siteConfig.title` 一致。 |
+| 看板娘 AI 聊天 | 仅展示模型时，将 `live2dWidgetConfig.chat.enable` 设为 `false`；启用对话时将 `chat.apiEndpoint` 指向自己的代理。 |
+| AI 密钥 | 保存在服务端代理中。前端 `chat.apiKey` 保持空字符串，静态站配置中的密钥会进入构建产物。 |
+| 其他外部内容 | 音乐、在线图源等是否可用取决于对应服务和网络环境。 |
 
-- 提醒块（Admonitions） - 支持 GitHub, Obsidian, VitePress, Docusaurus 四种风格主题配置 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
-- GitHub 仓库卡片 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
-- 基于 Expressive Code 的增强代码块 ([预览](http://firefly.cuteleaf.cn/posts/code-examples/) / [文档](https://expressive-code.com/))
+仓库保留本站的线上配置作为示例，公共演示的评论服务与 AI 代理不承诺支持其他域名或 `localhost`。不要将它们作为自己站点的后端。
 
-## 🧞 指令
+详细说明：[Artalk 前端](docs/artalk-frontend.md) · [AI 代理接入](docs/mascot-chat-proxy.md)。
 
-下列指令均需要在项目根目录执行：
+## 目录结构
 
-| Command                    | Action                                 |
-| :------------------------- | :------------------------------------- |
-| `pnpm install`             | 安装依赖                               |
-| `pnpm dev`                 | 在 `localhost:4321` 启动本地开发服务器 |
-| `pnpm build`               | 构建网站至 `./dist/`                   |
-| `pnpm preview`             | 本地预览已构建的网站                   |
-| `pnpm check`               | 检查代码中的错误                       |
-| `pnpm format`              | 使用 Biome 格式化您的代码              |
-| `pnpm new-post <filename>` | 创建新文章                             |
-| `pnpm new-d <content>`     | 创建一条动态                           |
-| `pnpm new-dynamic <content>` | 创建一条动态（完整命令）              |
-| `pnpm astro ...`           | 执行 `astro add`, `astro check` 等指令 |
-| `pnpm astro --help`        | 显示 Astro CLI 帮助                    |
+```text
+liqiming-blog/
+├── src/
+│   ├── assets/         # 源图片与壁纸
+│   ├── components/     # Astro / Svelte 组件
+│   ├── config/         # 按功能拆分的配置
+│   ├── content/        # 文章、动态、项目与独立页面
+│   ├── layouts/        # 页面布局
+│   ├── pages/          # 页面路由、RSS、Atom 等入口
+│   ├── plugins/        # Markdown / HTML 处理插件
+│   ├── styles/         # 全局与组件样式
+│   ├── types/          # 类型定义
+│   └── utils/          # 内容、日期、Feed 等工具
+├── public/             # 图标、看板娘模型、Artalk 前端等静态文件
+├── scripts/            # 内容生成与构建后处理
+├── docs/               # 演示截图与部署说明
+├── .github/            # CI 与问题模板
+├── astro.config.mjs    # Astro、内容插件与构建配置
+└── pnpm-lock.yaml      # 锁定的依赖版本
+```
 
-## 🙏 致谢
+## 部署
 
-非常感谢 [saicaca](https://github.com/saicaca) 开发的 [fuwari](https://github.com/saicaca/fuwari) 模板，Firefly 就是基于这个模板二次开发
+当前演示站使用静态文件服务器托管。对于同类部署，只需完整构建后将 `dist/` 内容上传到站点根目录。
 
-流萤部分相关图片素材版权归游戏 [《崩坏：星穹铁道》](https://sr.mihoyo.com/) 开发商 [米哈游](https://www.mihoyo.com/) 所有
+| 配置项 | 值 |
+| --- | --- |
+| 根目录 | 仓库根目录 |
+| 安装命令 | `pnpm install --frozen-lockfile` |
+| 构建命令 | `pnpm build` |
+| 输出目录 | `dist` |
+| Node.js | 24（或满足 `>=22.23.0` 的版本） |
 
-### 技术栈
+部署前替换 `siteConfig.site_url`。项目默认 `base: "/"`，适合域名根路径；部署到子目录时，需要同步调整 `astro.config.mjs` 的 `base` 并验证资源路径。
 
-- [Astro](https://astro.build) 
-- [Tailwind CSS](https://tailwindcss.com) 
-- [Iconify](https://iconify.design)
+GitHub Actions 对 `main` 分支执行类型检查与完整构建；GitHub Pages 工作流仅保留手动触发入口，需要自行配置 Pages 和站点路径。公开源码不会自动替换你的线上服务。
 
-### 灵感项目
+完整步骤见 [部署指南](docs/deploy.md)。
 
-- [fuwari](https://github.com/saicaca/fuwari)
-- [hexo-theme-shoka](https://github.com/amehime/hexo-theme-shoka)
-- [astro-koharu](https://github.com/cosZone/astro-koharu)
-- [Mizuki](https://github.com/matsuzaka-yuki/Mizuki)
+## 常见问题
 
-### 其他参考
-- 博主`霞葉`的 [Bangumi 收藏](https://kasuha.com/posts/fuwari-enhance-ep2/) 页面组件
-- 哔哩哔哩up主 `公公的日常` 的Q版 [流萤看板娘 Spine 切片数据](https://www.bilibili.com/video/BV1fuVzzdE5y) 
+**启动提示 Node 版本不满足要求？** 升级到 Node.js 24 后重新安装依赖。项目声明的最低版本是 `22.23.0`。
 
-## 📝 许可协议
+**为什么不能用 npm / yarn 安装依赖？** 项目通过 `preinstall` 约束使用 pnpm，请使用锁定的 pnpm 版本和 `pnpm-lock.yaml`。
 
-本项目遵循 [MIT license](https://mit-license.org/) 开源协议，详细查看 [LICENSE](./LICENSE) 文件
+**开发模式下搜索没有结果？** 先执行 `pnpm build`，再通过 `pnpm preview` 检查生成的 Pagefind 索引。
 
-最初 Fork 自 [saicaca/fuwari](https://github.com/saicaca/fuwari)，感谢原作者的贡献
+**评论或 AI 对话报跨域 / 连接错误？** 这两项依赖独立后端。按上面的可选服务说明关闭，或配置自己的服务。
 
-**版权声明：**
-- Copyright (c) 2024 [saicaca](https://github.com/saicaca) - [fuwari](https://github.com/saicaca/fuwari)
-- Copyright (c) 2025 [CuteLeaf](https://github.com/CuteLeaf) - [Firefly](https://github.com/CuteLeaf/Firefly) 
+## 参与贡献
 
-根据 MIT 开源协议，你可以自由使用、修改、分发代码，但需保留上述版权声明。
+欢迎通过 [Issues](https://github.com/liqiming123/liqiming-blog/issues) 反馈问题，通过 Pull Request 提交改进。请附上复现步骤、运行环境，以及与界面问题相关的截图。提交前运行 `pnpm check`、`pnpm type-check` 和 `pnpm build`。具体流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-## 🍀 贡献者
+## 致谢与许可证
 
-感谢以下贡献者对本项目做出的贡献，如有问题或建议，请提交 [Issue](https://github.com/CuteLeaf/Firefly/issues) 或 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)。
+- [Firefly](https://github.com/CuteLeaf/Firefly)：本项目直接使用的博客主题基础。
+- [Fuwari](https://github.com/saicaca/fuwari)：Firefly 的上游主题。
+- Mizuki / Pio：本项目的 Live2D 运行时和模型参考来源。
+- Astro、Svelte、Pagefind、Artalk 及其他依赖的维护者。
 
-><a href="https://github.com/CuteLeaf/Firefly/graphs/contributors">
->  <img src="https://contrib.rocks/image?repo=CuteLeaf/Firefly" />
-></a>
-
-感谢以下贡献者对原项目 [fuwari](https://github.com/saicaca/fuwari) 做出的贡献，为本项目奠定了基础。
-
-><a href="https://github.com/saicaca/fuwari/graphs/contributors">
->  <img src="https://contrib.rocks/image?repo=saicaca/fuwari" />
-></a>
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=CuteLeaf/Firefly&type=Date)](https://star-history.com/#CuteLeaf/Firefly&Date)
-
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+代码沿用 [MIT License](LICENSE)，保留上游版权与许可声明。文章、引用内容、壁纸、字体、音乐及 Live2D 模型等素材，按其各自来源和许可使用；代码的 MIT 许可不替代这些素材的授权。

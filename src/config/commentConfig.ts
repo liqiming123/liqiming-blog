@@ -2,7 +2,8 @@ import type { CommentConfig } from "../types/commentConfig";
 
 export const commentConfig: CommentConfig = {
 	// 评论系统类型: none, twikoo, waline, giscus, disqus, artalk，默认为none，即不启用评论系统
-	type: "none",
+	// 启明：使用 Artalk，后端自托管在腾讯云 Lighthouse，经 OpenResty 同源反代到 /artalk/
+	type: "artalk",
 
 	//twikoo评论系统配置
 	twikoo: {
@@ -43,8 +44,11 @@ export const commentConfig: CommentConfig = {
 
 	// artalk评论系统配置
 	artalk: {
-		// artalk后端程序 API 地址
-		server: "https://artalk.example.com/",
+		// Artalk 后端 API 地址（结尾不要带斜杠，客户端会自动拼 /api/v2）
+		// 后端只监听 127.0.0.1:23366，由 OpenResty 把 /artalk/ 反代过去。
+		// 同源的好处：不需要处理 CORS，也不受第三方 CDN 影响。
+		// 管理后台与评论数据都在服务器 /opt/artalk/ 下，备份就是拷贝 artalk.db
+		server: "https://liqiming.top/artalk",
 		// 设置 Artalk 语言
 		locale: "zh-CN",
 		// 是否启用文章访问量统计功能
@@ -54,13 +58,13 @@ export const commentConfig: CommentConfig = {
 	//giscus评论系统配置
 	giscus: {
 		// 设置 Giscus 评论系统仓库
-		repo: "CuteLeaf/Firefly",
+		repo: "",
 		// 设置 Giscus 评论系统仓库ID
-		repoId: "R_kgD2gfdFGd",
+		repoId: "",
 		// 设置 Giscus 评论系统分类
 		category: "General",
 		// 获取 Giscus 评论系统分类ID
-		categoryId: "DIC_kwDOKy9HOc4CegmW",
+		categoryId: "",
 		// 获取 Giscus 评论系统映射方式
 		mapping: "title",
 		// 获取 Giscus 评论系统严格模式
@@ -80,6 +84,6 @@ export const commentConfig: CommentConfig = {
 	//disqus评论系统配置
 	disqus: {
 		// 获取 Disqus 评论系统
-		shortname: "firefly",
+		shortname: "qiming",
 	},
 };

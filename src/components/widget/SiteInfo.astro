@@ -29,7 +29,7 @@ try {
 	const pkg = JSON.parse(
 		readFileSync(new URL("../../../package.json", import.meta.url), "utf-8"),
 	);
-	blogVersion = pkg.version || "Firefly unknown";
+	blogVersion = pkg.version || "启明博客 unknown";
 } catch {}
 
 // Astro 版本（从已安装的 astro 包读取）
@@ -99,10 +99,10 @@ const mainItems = [
 		value: buildPlatform,
 	},
 	{
-		icon: "mdi:clover",
+		icon: "material-symbols:auto-awesome",
 		label: i18n(I18nKey.siteInfoBlogVersion),
-		value: `Firefly v${blogVersion}`,
-		href: "https://github.com/CuteLeaf/Firefly",
+		value: `启明博客 v${blogVersion}`,
+		href: "https://liqiming.top/",
 	},
 	{
 		icon: "material-symbols:copyright-outline",
@@ -126,8 +126,8 @@ const detailItems: {
 		fullWidth: true,
 	},
 	{
-		icon: "mdi:clover",
-		label: "Firefly",
+		icon: "material-symbols:auto-awesome",
+		label: "启明",
 		value: `v${blogVersion}`,
 	},
 	{

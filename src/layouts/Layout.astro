@@ -18,6 +18,7 @@ import {
 	backgroundWallpaper,
 	displaySettingsConfig,
 	expressiveCodeConfig,
+	live2dWidgetConfig,
 	musicPlayerConfig,
 	navbarMode,
 	profileConfig,
@@ -397,7 +398,13 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
         isDark ? darkTheme : lightTheme
       );
 
-      // Load the hue from local storage
+      // Load the hue from local storage. Migrate once from the previous palette
+      // so existing visitors see the new deep-blue theme immediately.
+      const paletteVersion = "qiming-deep-blue-v1";
+      if (localStorage.getItem("paletteVersion") !== paletteVersion) {
+        localStorage.removeItem("hue");
+        localStorage.setItem("paletteVersion", paletteVersion);
+      }
       const hue = localStorage.getItem("hue") || configHue;
       document.documentElement.style.setProperty("--hue", hue);
 
@@ -506,6 +513,7 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 
     <!-- Font Setup (Astro Font API) -->
     <FontSetup />
+    {live2dWidgetConfig.enable && <link rel="stylesheet" href={url("/pio/static/pio.css")} />}
   </head>
   <body
     class="min-h-screen"

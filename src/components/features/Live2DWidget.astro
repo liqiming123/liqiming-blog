@@ -1,12 +1,6 @@
 ---
 import { url } from "@/utils/url-utils";
 
-interface MenuItem {
-	icon?: string;
-	label: string;
-	action: string;
-}
-
 interface Props {
 	config: {
 		enable: boolean;
@@ -26,233 +20,635 @@ interface Props {
 					y?: number;
 			  }[];
 		position?: "bottom-left" | "bottom-right";
-		size?: number | { width: number; height: number };
-		primaryColor?: string;
-		transitionDuration?: number;
-		transitionType?: "slide" | "fade";
-		menus?: {
-			items?: MenuItem[];
-			extraItems?: MenuItem[];
-			align?: "left" | "right";
-		};
+		menus?: { items?: { label: string; action: string }[] };
 		tips?: {
 			enable?: boolean;
 			welcomeMessage?: string[];
 			messages?: string[];
-			duration?: number;
-			interval?: number;
-			offset?: { x?: number; y?: number };
-			typing?: {
-				param?: string;
-				speed?: number;
-				minValue?: number;
-				maxValue?: number;
-			};
 		};
-		responsive?: {
-			hideOnMobile?: boolean;
-			mobileBreakpoint?: number;
+		responsive?: { hideOnMobile?: boolean; mobileBreakpoint?: number };
+		chat?: {
+			enable: boolean;
+			apiEndpoint: string;
+			apiKey?: string;
+			model: string;
+			systemPrompt?: string;
+			temperature?: number;
+			maxTokens?: number;
+			stream?: boolean;
+			keepContext?: boolean;
+			maxContextMessages?: number;
+			requestTimeout?: number;
+			ui?: {
+				panelOpacity?: number;
+				panelBlur?: number;
+				width?: string;
+				title?: string;
+				greeting?: string;
+				placeholder?: string;
+				sendLabel?: string;
+				loadingText?: string;
+				errorText?: string;
+			};
 		};
 	};
 }
 
 const { config } = Astro.props;
+const models = (
+	Array.isArray(config.model) ? config.model : [config.model]
+).map((model) =>
+	/^https?:\/\//.test(model.path) ? model.path : url(model.path),
+);
+const tips = config.tips ?? {};
+const dialog = {
+	welcome: tips.welcomeMessage?.[0] ?? "你好呀！我是启明的看板娘~",
+	home: "点击这里回到启明的首页！",
+	skin: ["想看看我的新衣服吗？", "新衣服真漂亮~"],
+	link: "/about/",
+	custom: [],
+};
+const mode = "draggable";
+const hiddenOnMobile = config.responsive?.hideOnMobile ?? true;
+const mobileBreakpoint = config.responsive?.mobileBreakpoint ?? 768;
+const width = 280;
+const height = 250;
 
-// 构建模型配置
-const models = Array.isArray(config.model) ? config.model : [config.model];
-const resolvePath = (p: string) => (/^https?:\/\//.test(p) ? p : url(p));
-
-const modelConfigs = models.map((m) => ({
-	path: resolvePath(m.path),
-	...(m.volume !== undefined && { volume: m.volume }),
-	...(m.scale !== undefined && { scale: m.scale }),
-	...((m.x !== undefined || m.y !== undefined) && {
-		offset: [m.x ?? 0, m.y ?? 0],
-	}),
-}));
-
-// 序列化菜单配置（只保留 icon, label, action）
-function serializeMenus(menus: Props["config"]["menus"]) {
-	if (!menus) return {};
-	const serialize = (items: MenuItem[]) =>
-		items.map(({ icon, label, action }) => ({ icon, label, action }));
-	const result: {
-		items?: ReturnType<typeof serialize>;
-		extraItems?: ReturnType<typeof serialize>;
-		align?: string;
-	} = {};
-	if (menus.items) result.items = serialize(menus.items);
-	if (menus.extraItems) result.extraItems = serialize(menus.extraItems);
-	if (menus.align) result.align = menus.align;
-	return result;
-}
+// ── AI 聊天 ────────────────────────────────────────────────
+// 请求发往自建的服务端代理（见 config.chat.apiEndpoint），
+// API Key 由代理持有，前端不接触、也不会出现在构建产物里。
+const chatUi = config.chat?.ui ?? {};
+const chatEnabled = Boolean(config.chat?.enable);
+const chatOptions = chatEnabled
+	? {
+			enable: true,
+			apiEndpoint: config.chat?.apiEndpoint ?? "",
+			apiKey: config.chat?.apiKey ?? "",
+			model: config.chat?.model ?? "",
+			systemPrompt: config.chat?.systemPrompt ?? "",
+			temperature: config.chat?.temperature ?? 0.8,
+			maxTokens: config.chat?.maxTokens ?? 800,
+			stream: config.chat?.stream ?? true,
+			keepContext: config.chat?.keepContext ?? true,
+			maxContextMessages: config.chat?.maxContextMessages ?? 6,
+			requestTimeout: config.chat?.requestTimeout ?? 60000,
+			ui: {
+				panelOpacity: chatUi.panelOpacity ?? 0,
+				panelBlur: chatUi.panelBlur ?? 10,
+				width: chatUi.width ?? "19rem",
+				title: chatUi.title ?? "和看板娘聊聊",
+				greeting: chatUi.greeting ?? "你好呀！有什么想聊的都可以和我说～",
+				placeholder: chatUi.placeholder ?? "说点什么…",
+				sendLabel: chatUi.sendLabel ?? "发送",
+				loadingText: chatUi.loadingText ?? "正在思考…",
+				errorText: chatUi.errorText ?? "呜…连接不上大脑了，待会儿再试试？",
+			},
+		}
+	: null;
 ---
 
-<div
-	id="l2d-widget-container"
-	style="position: fixed; z-index: 999;"
-	data-models={JSON.stringify(modelConfigs)}
-	data-position={config.position || "bottom-left"}
-	data-size={JSON.stringify(config.size || 300)}
-	data-primary-color={config.primaryColor || ""}
-	data-transition-duration={config.transitionDuration?.toString() || ""}
-	data-transition-type={config.transitionType || ""}
-	data-menus={JSON.stringify(serializeMenus(config.menus))}
-	data-tips={JSON.stringify(config.tips || {})}
-	data-responsive={JSON.stringify(config.responsive || {})}
->
-</div>
+{config.enable && (
+	<div class={`pio-container ${config.position === "bottom-right" ? "right" : "left"}`}>
+		<div class="pio-action" aria-label="看板娘操作"></div>
+		<canvas id="pio" width={width} height={height} aria-label="启明的 Live2D 看板娘"></canvas>
+		{chatEnabled && chatOptions && (
+			<div
+				class="pio-chat"
+				id="pio-chat"
+				role="dialog"
+				aria-label={chatOptions.ui.title}
+				aria-hidden="true"
+				style={`--pio-chat-alpha:${chatOptions.ui.panelOpacity};--pio-chat-blur:${chatOptions.ui.panelBlur}px;--pio-chat-width:${chatOptions.ui.width};`}
+			>
+				<div class="pio-chat-head">
+					<span class="pio-chat-title">{chatOptions.ui.title}</span>
+					<button type="button" class="pio-chat-close" id="pio-chat-close" aria-label="关闭聊天">✕</button>
+				</div>
+				<div class="pio-chat-log" id="pio-chat-log" role="log" aria-live="polite"></div>
+				<form class="pio-chat-form" id="pio-chat-form">
+					<textarea
+						class="pio-chat-input"
+						id="pio-chat-input"
+						rows="1"
+						maxlength="1000"
+						placeholder={chatOptions.ui.placeholder}></textarea>
+					<button type="submit" class="pio-chat-send" id="pio-chat-send">
+						{chatOptions.ui.sendLabel}
+					</button>
+				</form>
+			</div>
+		)}
+	</div>
+)}
 
-<script>
-	import { createWidget } from "l2d-widget";
+{config.enable && (
+	<script is:inline define:vars={{ models, dialog, mode, hiddenOnMobile, mobileBreakpoint, chatOptions }}>
+		(() => {
+			const options = {
+				mode,
+				hidden: hiddenOnMobile,
+				content: dialog,
+				model: models,
+			};
+			const loadScript = (src, id) =>
+				new Promise((resolve, reject) => {
+					const existing = document.getElementById(id);
+					if (existing) {
+						resolve();
+						return;
+					}
+					const script = document.createElement("script");
+					script.id = id;
+					script.src = src;
+					script.onload = resolve;
+					script.onerror = reject;
+					document.head.appendChild(script);
+				});
 
-	// 修复 l2d-widget 气泡 不会自动换行
-	// l2d-widget 使用行内样式，CSS 无法覆盖，需用 JS 修改
-	function patchTipBubble(el: HTMLElement) {
-		if (el.style.whiteSpace === "nowrap") {
-			el.style.whiteSpace = "normal";
-			el.style.width = "190px";
-		}
-	}
+			// 点击看板娘弹出 AI 聊天框。
+			// 聊天记录只存在内存里：关闭面板即清空，刷新即清空，不写任何 localStorage。
+			const initChat = () => {
+				const cfg = chatOptions;
+				if (!cfg || !cfg.enable) return;
+				if (window.__qimingPioChatReady) return;
 
-	const tipObserver = new MutationObserver((mutations) => {
-		for (const m of mutations) {
-			for (const node of m.addedNodes) {
-				if (node instanceof HTMLElement) {
-					if (node.style.whiteSpace === "nowrap") patchTipBubble(node);
-					node.querySelectorAll<HTMLElement>('*').forEach(patchTipBubble);
-				}
-			}
-		}
-	});
-	tipObserver.observe(document.body, { childList: true, subtree: true });
+				const container = document.querySelector(".pio-container");
+				const canvas = document.getElementById("pio");
+				const panel = document.getElementById("pio-chat");
+				const log = document.getElementById("pio-chat-log");
+				const form = document.getElementById("pio-chat-form");
+				const input = document.getElementById("pio-chat-input");
+				const sendBtn = document.getElementById("pio-chat-send");
+				const closeBtn = document.getElementById("pio-chat-close");
+				if (!container || !canvas || !panel || !log || !form || !input || !sendBtn) return;
+				window.__qimingPioChatReady = true;
 
-	// 菜单动作映射
-	let currentModelIndex = 0;
-	const menuActions: Record<string, (widget: any) => void> = {
-		home: () => (window.location.href = "/"),
-		scrollToTop: () => window.scrollTo({ top: 0, behavior: "smooth" }),
-		sleep: (widget) => widget.sleep(),
-		github: () => window.open("https://github.com/CuteLeaf/Firefly", "_blank"),
-		switchModel: (widget) => {
-			const container = document.getElementById("l2d-widget-container");
-			const models = JSON.parse(container?.dataset.models || "[]");
-			currentModelIndex = (currentModelIndex + 1) % models.length;
-			widget.switchModel(currentModelIndex);
-		},
-	};
+				/** state.messages 仅存活于本次页面，任何地方都不落盘 */
+				const state = { messages: [], open: false, busy: false, controller: null };
 
-	function initWidget() {
-		const container = document.getElementById("l2d-widget-container");
-		if (!container) return;
+				// 面板上的按下必须止住冒泡：pio 的拖拽是绑在 .pio-container 的 onmousedown 上的，
+				// 否则在输入框里选词会把看板娘拖走。
+				panel.addEventListener("mousedown", (e) => e.stopPropagation());
 
-		try {
-			const models = JSON.parse(container.dataset.models || "[]");
-			const position = container.dataset.position || "bottom-left";
-			const size = JSON.parse(container.dataset.size || "300");
-			const primaryColor = container.dataset.primaryColor || undefined;
-			const transitionDuration = container.dataset.transitionDuration
-				? parseInt(container.dataset.transitionDuration)
-				: undefined;
-			const transitionType = container.dataset.transitionType || undefined;
-			const menus = JSON.parse(container.dataset.menus || "{}");
-			const tips = JSON.parse(container.dataset.tips || "{}");
-			const responsive = JSON.parse(container.dataset.responsive || "{}");
+				const scrollToEnd = () => {
+					log.scrollTop = log.scrollHeight;
+				};
 
-			// 响应式检查：移动端隐藏
-			if (responsive.hideOnMobile) {
-				const breakpoint = responsive.mobileBreakpoint || 768;
-				if (window.innerWidth <= breakpoint) {
-					container.style.display = "none";
-					return;
-				}
-			}
+				const addBubble = (role, text) => {
+					const wrap = document.createElement("div");
+					wrap.className = "pio-chat-msg pio-chat-" + role;
+					const textEl = document.createElement("div");
+					textEl.className = "pio-chat-text";
+					textEl.textContent = text;
+					wrap.appendChild(textEl);
+					log.appendChild(wrap);
+					scrollToEnd();
+					return textEl;
+				};
 
-			if (models.length === 0) {
-				console.warn("No Live2D models configured");
-				return;
-			}
+				const setBusy = (busy) => {
+					state.busy = busy;
+					sendBtn.disabled = busy;
+					panel.classList.toggle("is-busy", busy);
+				};
 
-			const options: any = {
-				model: models.length === 1 ? models[0] : models,
-				position: position,
-				size: size,
+				const clearChat = () => {
+					state.messages = [];
+					log.textContent = "";
+				};
+
+				const openChat = () => {
+					if (state.open) {
+						input.focus();
+						return;
+					}
+					state.open = true;
+					clearChat();
+					addBubble("assistant", cfg.ui.greeting);
+					panel.classList.add("active");
+					panel.setAttribute("aria-hidden", "false");
+					setTimeout(() => input.focus(), 60);
+				};
+
+				const closeChat = () => {
+					if (!state.open) return;
+					state.open = false;
+					state.controller && state.controller.abort();
+					state.controller = null;
+					panel.classList.remove("active");
+					panel.setAttribute("aria-hidden", "true");
+					setBusy(false);
+					clearChat();
+				};
+
+				// 组装上行消息：system + 最近几轮 + 本轮
+				const buildMessages = (userText) => {
+					const out = [];
+					if (cfg.systemPrompt) {
+						out.push({ role: "system", content: cfg.systemPrompt });
+					}
+					if (cfg.keepContext) {
+						const history = state.messages.slice(0, -1);
+						const limit = Math.max(0, cfg.maxContextMessages);
+						for (const item of history.slice(-limit)) {
+							out.push({ role: item.role, content: item.content });
+						}
+					}
+					out.push({ role: "user", content: userText });
+					return out;
+				};
+
+				const send = async () => {
+					if (state.busy) return;
+					const text = input.value.trim();
+					if (!text) return;
+					if (!cfg.apiEndpoint) {
+						addBubble("assistant", "还没有配置对话接口地址呢，去 pioConfig.ts 里填一下吧～");
+						return;
+					}
+
+					state.messages.push({ role: "user", content: text });
+					addBubble("user", text);
+					input.value = "";
+					const replyEl = addBubble("assistant", cfg.ui.loadingText);
+					replyEl.classList.add("is-loading");
+					setBusy(true);
+
+					const controller = new AbortController();
+					state.controller = controller;
+					const timer = setTimeout(() => controller.abort(), cfg.requestTimeout);
+
+					// 面板一旦关闭，后面的流式回调一律不再碰 DOM
+					let full = "";
+					const write = (chunk, replace) => {
+						if (!state.open) return;
+						full = replace ? chunk : full + chunk;
+						replyEl.classList.remove("is-loading");
+						replyEl.textContent = full;
+						scrollToEnd();
+					};
+
+					try {
+						const response = await fetch(cfg.apiEndpoint, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								...(cfg.apiKey ? { Authorization: "Bearer " + cfg.apiKey } : {}),
+							},
+							body: JSON.stringify({
+								model: cfg.model,
+								messages: buildMessages(text),
+								temperature: cfg.temperature,
+								max_tokens: cfg.maxTokens,
+								stream: Boolean(cfg.stream),
+							}),
+							signal: controller.signal,
+						});
+
+						if (!response.ok) {
+							const detail = await response.text().catch(() => "");
+							throw new Error(
+								"HTTP " + response.status + (detail ? " " + detail.slice(0, 200) : ""),
+							);
+						}
+
+						if (cfg.stream && response.body) {
+							const reader = response.body.getReader();
+							const decoder = new TextDecoder();
+							let buffer = "";
+							while (true) {
+								const { done, value } = await reader.read();
+								if (done) break;
+								buffer += decoder.decode(value, { stream: true });
+								const lines = buffer.split("\n");
+								buffer = lines.pop() ?? "";
+								for (const line of lines) {
+									const trimmed = line.trim();
+									if (!trimmed.startsWith("data:")) continue;
+									const payload = trimmed.slice(5).trim();
+									if (!payload || payload === "[DONE]") continue;
+									let chunk;
+									try {
+										chunk = JSON.parse(payload);
+									} catch {
+										continue;
+									}
+									const delta = chunk?.choices?.[0]?.delta?.content;
+									if (typeof delta === "string" && delta) write(delta, false);
+								}
+							}
+						} else {
+							const json = await response.json();
+							const content = json?.choices?.[0]?.message?.content;
+							write(typeof content === "string" && content ? content : cfg.ui.errorText, true);
+						}
+
+						if (!full) write(cfg.ui.errorText, true);
+						if (state.open) {
+							state.messages.push({ role: "assistant", content: full || cfg.ui.errorText });
+						}
+					} catch (error) {
+						// 用户关闭面板或超时触发的 abort，静默处理
+						if (error && error.name === "AbortError") return;
+						console.error("看板娘聊天请求失败：", error);
+						write(cfg.ui.errorText, true);
+					} finally {
+						clearTimeout(timer);
+						if (state.controller === controller) state.controller = null;
+						if (state.open) setBusy(false);
+					}
+				};
+
+				// 区分「拖拽」和「点击」：拖过看板娘就不该弹聊天框
+				let armed = false;
+				let dragging = false;
+				let pressX = 0;
+				let pressY = 0;
+				container.addEventListener(
+					"mousedown",
+					(e) => {
+						armed = true;
+						dragging = false;
+						pressX = e.clientX;
+						pressY = e.clientY;
+					},
+					true,
+				);
+				document.addEventListener(
+					"mousemove",
+					(e) => {
+						if (!armed) return;
+						if (Math.abs(e.clientX - pressX) > 5 || Math.abs(e.clientY - pressY) > 5) {
+							dragging = true;
+						}
+					},
+					true,
+				);
+				document.addEventListener("mouseup", () => {
+					armed = false;
+				}, true);
+
+				canvas.addEventListener("click", () => {
+					const wasDrag = dragging;
+					dragging = false;
+					if (wasDrag) return;
+					if (state.open) {
+						closeChat();
+					} else {
+						openChat();
+					}
+				});
+
+				input.addEventListener("keydown", (e) => {
+					if (e.key === "Enter" && !e.shiftKey) {
+						e.preventDefault();
+						send();
+					}
+				});
+				form.addEventListener("submit", (e) => {
+					e.preventDefault();
+					send();
+				});
+				closeBtn.addEventListener("click", closeChat);
+
+				document.addEventListener("keydown", (e) => {
+					if (e.key === "Escape" && state.open) closeChat();
+				});
+				document.addEventListener("click", (e) => {
+					if (state.open && !container.contains(e.target)) closeChat();
+				});
 			};
 
-			if (primaryColor) options.primaryColor = primaryColor;
-			if (transitionDuration) options.transitionDuration = transitionDuration;
-			if (transitionType) options.transitionType = transitionType;
-
-			// 菜单配置 - 将 action 字符串映射为实际函数
-			if (menus.items || (menus.extraItems && menus.extraItems.length > 0)) {
-				options.menus = {};
-				if (menus.items) {
-					options.menus.items = menus.items.map((item: any) => ({
-						icon: item.icon,
-						label: item.label,
-						onClick: menuActions[item.action] || (() => {}),
-					}));
+			const init = () => {
+				if (window.__qimingPioInitialized || !document.getElementById("pio")) return;
+				if (hiddenOnMobile && window.innerWidth <= mobileBreakpoint) {
+					const body = document.querySelector(".pio-container");
+					if (body) body.style.display = "none";
+					return;
 				}
-				if (menus.extraItems) {
-					options.menus.extraItems = menus.extraItems.map((item: any) => ({
-						icon: item.icon,
-						label: item.label,
-						onClick: menuActions[item.action] || (() => {}),
-					}));
-				}
-				if (menus.align) {
-					options.menus.align = menus.align;
-				}
-			}
+				if (typeof window.Paul_Pio !== "function") return;
+				window.__qimingPioInitialized = true;
+				window.__qimingPio = new window.Paul_Pio(options);
+				initChat();
+			};
 
-			// 提示配置
-			if (tips) {
-				const tipsConfig = tips.enable === false ? false : {
-					...(tips.welcomeMessage && { welcomeMessage: tips.welcomeMessage }),
-					...(tips.messages && { messages: tips.messages }),
-					...(tips.duration !== undefined && { duration: tips.duration }),
-					...(tips.interval !== undefined && { interval: tips.interval }),
-					...(tips.offset && { offset: tips.offset }),
-					...(tips.typing && { typing: tips.typing }),
-				};
-				
-				if (tipsConfig === false || Object.keys(tipsConfig).length > 0) {
-					if (Array.isArray(options.model)) {
-						options.model.forEach((m: any) => m.tips = tipsConfig);
-					} else {
-						options.model.tips = tipsConfig;
-					}
-				}
-			}
+			const start = () =>
+				loadScript("/pio/static/l2d.js", "qiming-pio-l2d")
+					.then(() => loadScript("/pio/static/pio.js", "qiming-pio-main"))
+					.then(init)
+					.catch((error) => {
+						window.__qimingPioInitialized = false;
+						console.error("Pio Live2D 初始化失败：", error);
+					});
 
-			createWidget(options);
-		} catch (e) {
-			console.error("Failed to initialize Live2D widget:", e);
-		}
-	}
-
-	// 确保只初始化一次
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initWidget);
-	} else {
-		initWidget();
-	}
-
-	// 响应式处理：窗口大小变化时显示/隐藏
-	function handleResponsive() {
-		const container = document.getElementById("l2d-widget-container");
-		if (!container) return;
-
-		const responsive = JSON.parse(container.dataset.responsive || "{}");
-		if (responsive.hideOnMobile) {
-			const breakpoint = responsive.mobileBreakpoint || 768;
-			if (window.innerWidth <= breakpoint) {
-				container.style.display = "none";
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", start, { once: true });
 			} else {
-				container.style.display = "";
+				start();
 			}
+		})();
+	</script>
+)}
+
+<style is:global>
+	/* ── 看板娘 AI 聊天面板 ───────────────────────────────
+	   所有选择器都以 .pio-chat 前缀命名，不会影响站内其他元素。
+	   面板背景默认全透明（--pio-chat-alpha: 0），靠 backdrop-filter 模糊保证文字可读。 */
+	.pio-chat {
+		position: absolute;
+		left: 1em;
+		bottom: calc(100% - 1.5em);
+		z-index: 5;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		width: var(--pio-chat-width, 19rem);
+		max-width: calc(100vw - 2em);
+		/* 矮视口下整块面板限高，配合日志区 flex 收缩，避免顶出屏幕 */
+		max-height: calc(100vh - 12rem);
+		padding: 0.75em;
+		border-radius: 1em;
+		font-size: 0.875rem;
+		line-height: 1.55;
+		color: #173b78;
+		background: rgba(255, 255, 255, var(--pio-chat-alpha, 0));
+		backdrop-filter: blur(var(--pio-chat-blur, 10px));
+		-webkit-backdrop-filter: blur(var(--pio-chat-blur, 10px));
+		border: 1px solid rgba(54, 103, 177, 0.18);
+		box-shadow: 0 8px 30px rgba(23, 59, 120, 0.16);
+		visibility: hidden;
+		opacity: 0;
+		transform: translateY(0.5em);
+		transition:
+			opacity 0.25s ease,
+			visibility 0.25s ease,
+			transform 0.25s ease;
+		/* .pio-container 设了 user-select: none，这里要放开才能复制聊天内容 */
+		user-select: text;
+	}
+	.pio-chat.active {
+		visibility: visible;
+		opacity: 1;
+		transform: translateY(0);
+	}
+	.dark .pio-chat {
+		color: #e5eefc;
+		border-color: rgba(160, 200, 255, 0.22);
+		background: rgba(17, 24, 39, var(--pio-chat-alpha, 0));
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+	}
+
+	.pio-chat-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5em;
+	}
+	.pio-chat-title {
+		font-weight: 700;
+		font-size: 0.9em;
+		opacity: 0.85;
+	}
+	.pio-chat-close {
+		flex-shrink: 0;
+		width: 1.5em;
+		height: 1.5em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+		color: inherit;
+		background: transparent;
+		font-size: 0.85em;
+		line-height: 1;
+		opacity: 0.6;
+		transition:
+			opacity 0.2s ease,
+			background 0.2s ease;
+	}
+	.pio-chat-close:hover {
+		opacity: 1;
+		background: rgba(54, 103, 177, 0.14);
+	}
+
+	.pio-chat-log {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		/* 面板限高时优先压缩日志区；min-height: 0 是 flex 子项能收缩的前提 */
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		max-height: 16rem;
+		padding-right: 0.15em;
+		scrollbar-width: thin;
+	}
+	.pio-chat-msg {
+		display: flex;
+	}
+	.pio-chat-msg.pio-chat-user {
+		justify-content: flex-end;
+	}
+	.pio-chat-text {
+		max-width: 88%;
+		padding: 0.5em 0.7em;
+		border-radius: 0.75em;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		background: rgba(255, 255, 255, 0.72);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+		box-shadow: 0 1px 4px rgba(23, 59, 120, 0.1);
+	}
+	.dark .pio-chat-text {
+		background: rgba(17, 24, 39, 0.62);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+	}
+	.pio-chat-msg.pio-chat-user .pio-chat-text {
+		color: #fff;
+		background: color-mix(in srgb, var(--primary, #3667b1) 82%, transparent);
+	}
+	.dark .pio-chat-msg.pio-chat-user .pio-chat-text {
+		color: #0b1220;
+	}
+	/* 等待回复时的呼吸效果 */
+	.pio-chat-text.is-loading {
+		opacity: 0.65;
+		animation: pio-chat-pulse 1.4s ease-in-out infinite;
+	}
+	@keyframes pio-chat-pulse {
+		0%,
+		100% {
+			opacity: 0.45;
+		}
+		50% {
+			opacity: 0.9;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.pio-chat-text.is-loading {
+			animation: none;
+		}
+		.pio-chat {
+			transition: none;
 		}
 	}
 
-	window.addEventListener("resize", handleResponsive);
-</script>
+	.pio-chat-form {
+		display: flex;
+		align-items: flex-end;
+		gap: 0.4em;
+	}
+	.pio-chat-input {
+		flex: 1;
+		min-width: 0;
+		padding: 0.45em 0.6em;
+		max-height: 5.5em;
+		overflow-y: auto;
+		resize: none;
+		border-radius: 0.6em;
+		border: 1px solid rgba(54, 103, 177, 0.25);
+		background: rgba(255, 255, 255, 0.72);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+		color: inherit;
+		font-family: inherit;
+		font-size: 0.95em;
+		line-height: 1.5;
+		outline: none;
+	}
+	.pio-chat-input:focus {
+		border-color: var(--primary, #3667b1);
+	}
+	.dark .pio-chat-input {
+		background: rgba(17, 24, 39, 0.62);
+		border-color: rgba(160, 200, 255, 0.28);
+	}
+	.pio-chat-input::placeholder {
+		color: inherit;
+		opacity: 0.45;
+	}
+	.pio-chat-send {
+		flex-shrink: 0;
+		padding: 0.45em 0.85em;
+		border: none;
+		border-radius: 0.6em;
+		cursor: pointer;
+		font-family: inherit;
+		font-size: 0.9em;
+		font-weight: 600;
+		color: #fff;
+		background: var(--primary, #3667b1);
+		transition: opacity 0.2s ease;
+	}
+	.dark .pio-chat-send {
+		color: #0b1220;
+	}
+	.pio-chat-send:disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
+</style>

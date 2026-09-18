@@ -17,7 +17,7 @@ export async function GET(context: APIContext): Promise<Response> {
 		subtitle: siteConfig.subtitle || siteConfig.description || "",
 		entries,
 		authorName: profileConfig.name,
-		generator: `Firefly v${pkg.version}`,
+		generator: `启明博客 v${pkg.version}`,
 		includeContent,
 	});
 	return new Response(xml, {

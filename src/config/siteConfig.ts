@@ -42,33 +42,32 @@ const pages = resolvePageToggles({
 
 export const siteConfig: SiteConfig = {
 	// 站点标题
-	title: "Firefly",
+	title: "启明",
 
 	// 站点副标题
-	subtitle: "Demo site",
+	subtitle: "AI 资讯与技术笔记",
 
 	// 站点 URL
-	site_url: "https://firefly.cuteleaf.cn",
+	site_url: "https://liqiming.top",
 
 	// 站点描述
-	description:
-		"Firefly 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。",
+	description: "启明的个人博客，记录人工智能、软件工程、开源工具与技术实践。",
 
 	// 站点关键词
 	keywords: [
-		"Firefly",
-		"Fuwari",
-		"Astro",
-		"ACGN",
-		"博客",
+		"启明",
+		"人工智能",
+		"AI 资讯",
+		"AI 技术",
+		"软件工程",
+		"开源",
 		"技术博客",
-		"静态博客",
 	],
 
 	// 主题色
 	themeColor: {
 		// 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
-		hue: 165,
+		hue: 228,
 		// 默认模式："light" 亮色，"dark" 暗色，"system" 跟随系统
 		defaultMode: "system",
 	},
@@ -88,14 +87,31 @@ export const siteConfig: SiteConfig = {
 
 	// Favicon 配置
 	// 如果启用了OpenGraph图片功能，数组中需要包含png格式的favicon图标
+	//
+	// 当前用的是看板娘头像（源图 src/assets/images/avatar.avif，裁到头部区域）。
+	// favicon 实际只有 16-32px，必须让脸占满才认得出来，所以裁掉身体部分。
+	// 重新生成：见 docs/deploy.md 的 favicon 一节。
+	//
+	// 注意顺序：Layout 取数组里**第一个 png** 作为 apple-touch-icon，
+	// 所以 180x180 那张要排在最前，否则 iOS 桌面图标会用 32px 放大，很糊。
 	favicon: [
 		{
 			// 图标文件路径
-			src: "/favicon/firefly-32.png",
-			// 可选，指定主题 'light' | 'dark'
-			// theme: "light",
+			src: "/favicon/mascot-180.png",
 			// 可选，图标大小
-			// sizes: "32x32",
+			sizes: "180x180",
+		},
+		{
+			src: "/favicon/mascot-192.png",
+			sizes: "192x192",
+		},
+		{
+			src: "/favicon/mascot-128.png",
+			sizes: "128x128",
+		},
+		{
+			src: "/favicon/mascot-32.png",
+			sizes: "32x32",
 		},
 	],
 
@@ -112,12 +128,12 @@ export const siteConfig: SiteConfig = {
 		// 使用 Astro 图标库时不需要设置 valueDark，图标会自动跟随主题亮暗色切换
 		logo: {
 			type: "image",
-			value: "assets/images/logo/firefly-light.png",
-			valueDark: "assets/images/logo/firefly-dark.png",
-			alt: "🍀",
+			value: "assets/images/avatar.avif",
+			valueDark: "assets/images/avatar.avif",
+			alt: "启明",
 		},
 		// 导航栏标题
-		title: "Firefly Blog",
+		title: "启明的博客",
 		// 全宽导航栏，导航栏是否占满屏幕宽度
 		widthFull: false,
 		// 导航菜单对齐方式，left：左对齐，center：居中
@@ -132,7 +148,7 @@ export const siteConfig: SiteConfig = {
 	},
 
 	// 站点开始日期，用于统计运行天数
-	siteStartDate: "2025-01-01",
+	siteStartDate: "2026-09-17",
 
 	// 站点时区（IANA 时区字符串），用于格式化bangumi、rss里的构建日期时间等等..
 	// 示例："Asia/Shanghai", "UTC", 如果为空，则按照构建服务器的时区进行时区转换
@@ -312,7 +328,7 @@ export const siteConfig: SiteConfig = {
 	// ── MyAnimeList配置 ──────────────────────────────────
 	mal: {
 		// MyAnimeList 用户名（列表需为公开状态，私密列表无法读取）
-		username: "cuteleaf",
+		username: "qiming",
 		// MyAnimeList Client ID，在 https://myanimelist.net/apiconfig 注册免费应用后获取
 		clientId: "	0ef34371450f9c6c809deaadec6aa8f3",
 		// MAL API 地址
