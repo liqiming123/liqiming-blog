@@ -1,0 +1,27 @@
+{
+  "name": "firefly-admin-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/*.ts --outdir=dist --format=esm --platform=node --target=node24 --packages=external --log-level=warning",
+    "seed": "npm run build && node dist/seed.js",
+    "start": "npm run build && node --env-file=.env dist/index.js",
+    "dev": "npm run build && node --env-file=.env --watch dist/index.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.0",
+    "gray-matter": "^4.0.3",
+    "hono": "^4.6.0",
+    "ip2region": "^2.3.0",
+    "nodemailer": "^10.1.6",
+    "pinyin-pro": "^3.29.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true
+  }
+}

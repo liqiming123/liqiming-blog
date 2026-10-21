@@ -1,0 +1,52 @@
+/* Naive UI 主题覆盖 */
+.n-layout {
+  background-color: transparent;
+}
+
+.n-layout-sider {
+  background-color: transparent;
+}
+
+.n-card {
+  border-radius: 18px;
+  border-color: var(--aurora-border);
+  box-shadow: var(--aurora-shadow);
+}
+
+.n-button {
+  border-radius: 10px;
+}
+
+.n-input {
+  border-radius: 11px;
+}
+
+.n-select {
+  border-radius: 11px;
+}
+
+.n-data-table,
+.n-modal,
+.n-drawer-content,
+.n-popover,
+.n-dropdown-menu {
+  border-radius: 16px;
+}
+
+.n-data-table {
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(66, 54, 116, 0.06);
+}
+
+.n-tag {
+  border-radius: 999px;
+}
+
+/* 自定义主题色 */
+:root {
+  --primary-color: #8b7cf6;
+  --success-color: #63d7b0;
+  --warning-color: #f6c875;
+  --danger-color: #f58dae;
+  --info-color: #72c8e8;
+}

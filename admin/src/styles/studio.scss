@@ -1,0 +1,226 @@
+:root {
+  --studio-inset: #0b1426;
+  --studio-subtle: #25304b;
+  --studio-ink: #c2cbe0;
+}
+
+.studio-page { min-width: 0; font-family: "Segoe UI", "Microsoft YaHei", sans-serif; }
+.studio-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+  min-height: 142px;
+  margin: 0 0 22px;
+  padding: 26px 30px;
+  color: var(--aurora-text);
+  background: var(--aurora-card);
+  border: 1px solid var(--aurora-border);
+  border-radius: 22px;
+  overflow: hidden;
+}
+.studio-eyebrow { color: var(--aurora-primary); font-size: 10px; letter-spacing: .18em; font-weight: 700; }
+.studio-heading h1 { display: flex; align-items: center; gap: 12px; margin: 8px 0; font-size: 27px; letter-spacing: -.03em; }
+.studio-symbol { color: var(--section-accent); font-weight: 400; }
+.studio-heading p { color: var(--aurora-muted); font-size: 13px; line-height: 1.7; }
+.studio-heading-star { color: #ecc1d7; font-size: 68px; line-height: 1; padding: 0 20px; }
+.studio-metrics { display: flex; gap: 10px; flex-shrink: 0; }
+.studio-metric { min-width: 96px; padding: 12px 18px; background: var(--studio-inset); border: 1px solid var(--aurora-border); border-radius: 14px; }
+.studio-metric span { display: block; color: var(--aurora-muted); font-size: 11px; }
+.studio-metric strong { display: block; margin-top: 4px; color: var(--aurora-text); font-size: 27px; font-variant-numeric: tabular-nums; }
+.studio-page > .n-card {
+  border-radius: 20px;
+  background: var(--aurora-card);
+  border: 1px solid var(--aurora-border);
+  box-shadow: 0 10px 30px #26204208;
+}
+.studio-page > .n-card > .n-card-header {
+  padding: 26px 24px 20px;
+  border-bottom: 1px solid var(--aurora-border);
+}
+.studio-page > .n-card > .n-card-header .n-card-header__main { font-size: 15px; font-weight: 650; }
+/* naive-ui 版本差异：内容容器类名是 n-card-content（中划线），与 n-card__content 并存覆盖 */
+.studio-page > .n-card > .n-card__content,
+.studio-page > .n-card > .n-card-content { padding: 24px; }
+.studio-toolbar, .studio-filter-form, .studio-page.page-articlelist .operation-bar {
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.studio-page .studio-toolbar { row-gap: 12px !important; }
+.studio-filter-form { flex-wrap: wrap; align-items: flex-start; gap: 8px 16px; }
+.studio-filter-form .n-form-item { margin-right: 0; }
+.studio-filter-form .n-form-item-feedback-wrapper { min-height: 0; }
+.studio-page .n-pagination { padding-top: 16px; border-top: 1px solid var(--aurora-border); gap: 6px; flex-wrap: wrap; }
+.studio-page .studio-table { border-radius: 14px; box-shadow: none; }
+/* 表格单元格统一垂直居中（行高被多行内容撑高时，图片/文字不再上浮） */
+.studio-page .studio-table .n-data-table-td { vertical-align: middle; }
+.studio-page .n-data-table-th { font-size: 12px; letter-spacing: .02em; font-weight: 650; }
+.studio-page .n-data-table-td { padding-top: 16px; padding-bottom: 16px; }
+.studio-page .n-data-table-td .n-button { border-radius: 8px; }
+.studio-page .n-data-table-td img { border-radius: 10px; }
+/* 表格内头像像素级居中：block 化摆脱行内基线偏差，水平靠 margin auto、垂直靠单元格 middle */
+.studio-page .n-data-table-td .n-avatar { display: block; margin-inline: auto; }
+.studio-page .n-data-table-base-table { min-width: 720px; }
+.studio-page .n-data-table-base-table-body { overflow-x: auto; }
+.studio-page .n-data-table-wrapper { overflow-x: auto; }
+.studio-page .n-empty { padding: 56px 20px; }
+.studio-page .n-empty__description { color: var(--aurora-muted); }
+.studio-page .n-button--primary-type:not(.n-button--text-type):not(.n-button--disabled) {
+  box-shadow: 0 4px 12px #8b7cf620;
+}
+.studio-page .n-tabs-nav { padding: 6px; background: var(--studio-inset); border-radius: 12px; }
+.studio-page .n-tabs-tab { padding-left: 14px !important; padding-right: 14px !important; }
+.studio-page .n-tab-pane { padding-top: 24px; }
+.studio-page .n-form-item-label { color: var(--studio-ink); }
+.studio-page .n-input, .studio-modal .n-input { transition: box-shadow .2s; }
+.studio-page .n-input:focus-within { box-shadow: 0 0 0 3px #8b7cf612; }
+
+/* 文章书架：批量操作和筛选分行，长表格在自己的区域内滚动。 */
+.studio-page.page-articlelist.article-list-container { padding: 0; }
+.studio-page.page-articlelist .status-filter { padding: 4px 0 18px; border-bottom: 1px solid var(--aurora-border); }
+.studio-page.page-articlelist .operation-bar { flex-direction: column; align-items: stretch; gap: 18px; }
+.studio-page.page-articlelist .left-actions, .studio-page.page-articlelist .right-actions { flex-wrap: wrap; gap: 10px; }
+.studio-page.page-articlelist .left-actions > .n-upload { width: auto; }
+.studio-page.page-articlelist .right-actions { padding-top: 16px; border-top: 1px solid var(--aurora-border); }
+.studio-page.page-articlelist .no-cover { background: var(--studio-inset); color: var(--aurora-muted); border: 1px dashed var(--aurora-border); }
+.studio-page.page-categorylist .n-data-table-base-table, .studio-page.page-taglist .n-data-table-base-table { min-width: 500px; }
+.studio-page.page-taglist .n-data-table-td .n-tag { padding: 5px 16px; }
+.studio-page.page-commentlist .n-data-table-td { line-height: 1.8; }
+.studio-page.page-userlist .n-avatar, .studio-page.page-online .n-avatar, .studio-page.page-friendlinklist .n-avatar { box-shadow: 0 0 0 4px var(--studio-inset); }
+.studio-page.page-menulist .n-data-table-td, .studio-page.page-resourcelist .n-data-table-td { border-bottom-style: dashed; }
+.studio-page.page-quartzlist .n-data-table-td { font-variant-numeric: tabular-nums; }
+.studio-page.page-loglist .n-data-table-td { font-size: 12px; }
+.studio-page.page-loglist .n-code { padding: 16px; background: var(--studio-inset); border-radius: 12px; }
+
+/* 写作页：标题与发布工具固定在内容上方，编辑器独立成纸面。 */
+.studio-page.studio-editor .article-header {
+  padding: 18px;
+  background: var(--studio-inset);
+  border: 1px solid var(--aurora-border);
+  border-radius: 14px;
+}
+.studio-page.studio-editor .title-row { flex-wrap: wrap; }
+.studio-page.studio-editor .title-input { min-width: 220px; }
+.studio-page.studio-editor .title-input .n-input__input-el { font-size: 22px; font-weight: 650; }
+.studio-page.studio-editor .markdown-editor-container {
+  height: max(560px, calc(100vh - 370px));
+  min-height: 560px;
+  overflow: hidden;
+  border: 1px solid var(--aurora-border);
+  border-radius: 14px;
+}
+.studio-page.studio-editor .md-editor { border-radius: 14px; }
+.studio-page.studio-editor .md-editor-toolbar-wrapper { background: var(--studio-inset); }
+.studio-page.studio-editor .md-editor-content { line-height: 1.9; }
+/* 编辑器底栏内容默认贴死右边框，看起来像被裁切 */
+.studio-page.studio-editor .md-editor-footer { padding-right: 14px; padding-left: 14px; }
+.studio-page.studio-editor .md-editor-dark {
+  --md-bk-color: #14172a;
+  --md-color: #dfdbf3;
+}
+.studio-page.studio-editor .md-editor-input-wrapper, .studio-page.studio-editor .md-editor-preview-wrapper {
+  background: var(--aurora-card);
+}
+
+/* 相册与照片：封面、信息和操作区组成完整画廊卡片。 */
+.studio-page.studio-gallery .album-card, .studio-page.studio-gallery .photo-card {
+  overflow: hidden;
+  background: var(--aurora-card);
+  color: var(--aurora-text);
+  border: 1px solid var(--aurora-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px #15132716;
+}
+.studio-page.studio-gallery .album-card:hover { transform: translateY(-4px); border-color: #a99cff; }
+.studio-page.studio-gallery .album-cover { height: 190px; border-radius: 12px; }
+.studio-page.studio-gallery .album-name, .studio-page.studio-gallery .photo-name { color: var(--aurora-text); }
+.studio-page.studio-gallery .album-desc, .studio-page.studio-gallery .album-meta, .studio-page.studio-gallery .photo-time { color: var(--aurora-muted); }
+.studio-page.studio-gallery .album-actions, .studio-page.studio-gallery .photo-actions { border-top: 1px solid var(--aurora-border); padding-top: 14px; }
+.studio-page.studio-gallery .album-placeholder { background: var(--studio-inset); }
+.studio-page.studio-gallery .photo-container { height: 210px; }
+.studio-page.studio-gallery .photo-card .n-button--default-type { color: var(--aurora-text); }
+.studio-page.studio-gallery .album-info-card { background: var(--studio-inset); border: 1px dashed var(--aurora-border); }
+.studio-page.studio-gallery .photo-overlay { background: linear-gradient(transparent, #111327dc); align-items: flex-end; padding-bottom: 16px; }
+.studio-page.studio-gallery .photo-container:focus-within .photo-overlay { opacity: 1; }
+.studio-page.studio-gallery .n-grid { min-width: 0; }
+
+/* 日常碎片：时间线与轻量创作台。 */
+.studio-page.page-talklist .talk-list { max-width: 1000px; margin: 0 auto; padding-left: 24px; border-left: 2px solid var(--studio-subtle); }
+.studio-page.page-talklist .talk-item { position: relative; padding: 24px; background: var(--aurora-card); border: 1px solid var(--aurora-border); border-radius: 18px; }
+.studio-page.page-talklist .talk-item::before { content: ''; position: absolute; left: -32px; top: 30px; width: 12px; height: 12px; border-radius: 50%; background: #e99cbf; box-shadow: 0 0 0 5px var(--aurora-bg); }
+.studio-page.page-talklist .talk-item:hover { box-shadow: 0 10px 30px #28204310; transform: translateY(-2px); }
+.studio-page.page-talklist .talk-content { margin: 18px 0; font-size: 15px; line-height: 1.9; color: var(--aurora-text); }
+.studio-page.page-talklist .image-item { border-radius: 12px; overflow: hidden; }
+.studio-page.page-talkedit > .n-card { max-width: 1100px; margin: 0 auto; }
+.studio-page.page-talkedit .editor-wrapper { margin: 0; }
+.studio-page.page-talkedit .editor-wrapper .n-input { padding: 20px; font-size: 17px; line-height: 1.9; background: var(--studio-inset); }
+.studio-page.page-talkedit .operation-wrapper { padding: 18px 0 0; border-top: 1px solid var(--aurora-border); gap: 16px; flex-wrap: wrap; }
+.studio-page.page-talkedit .right-wrapper { flex-wrap: wrap; }
+.studio-page.page-talkedit .image-list { padding: 18px; background: var(--studio-inset); border-radius: 16px; }
+
+/* 配置台：左侧导航、右侧表单，头像和资料独立排列。 */
+.studio-page.studio-settings > .n-card > .n-card__content { padding: 24px; }
+.studio-page.studio-settings .n-tabs--left .n-tabs-nav { min-width: 170px; align-self: flex-start; }
+.studio-page.studio-settings .n-tabs--left .n-tab-pane { padding: 8px 0 20px 32px; }
+.studio-page.studio-settings .n-tab-pane > .n-form { max-width: 920px; }
+.studio-page.page-website .n-form-item { padding: 14px 0; border-bottom: 1px solid var(--aurora-border); }
+.studio-page.page-website .n-form-item-feedback-wrapper { min-height: 10px; }
+.studio-page.page-website .n-form-item-blank > .n-input, .studio-page.page-website .n-form-item-blank > .n-select { max-width: 100%; }
+.studio-page.studio-settings .avatar-uploader { border: 2px dashed #b3a4e7; border-radius: 22px; background: var(--studio-inset); }
+.studio-page.page-setting .info-container { margin: 12px 0; padding: 30px; align-items: flex-start; gap: 32px; background: var(--studio-inset); border-radius: 18px; }
+.studio-page.page-setting .info-container > .n-upload { width: 120px; flex-shrink: 0; }
+.studio-page.page-setting .info-container .n-form { flex: 1; }
+.studio-page.page-setting .avatar { border-radius: 20px; }
+.studio-page.page-setting .n-tab-pane > .n-form { padding: 24px; background: var(--studio-inset); border-radius: 18px; width: min(100%, 540px) !important; }
+
+/* Teleport 弹窗共享同一套表单、权限树和日志详情样式。 */
+.studio-modal.n-modal { max-width: calc(100vw - 32px); border: 1px solid var(--aurora-border); border-radius: 22px; }
+.studio-modal .n-card-header, .studio-modal .n-dialog__title { font-weight: 700; }
+.studio-modal .n-card__footer, .studio-modal .n-dialog__action { padding-top: 18px; border-top: 1px solid var(--aurora-border); }
+.studio-modal .n-tree { padding: 14px; background: var(--studio-inset); border: 1px solid var(--aurora-border); border-radius: 12px; }
+.studio-modal .n-form { margin-top: 18px; }
+.studio-modal pre { color: var(--aurora-text); background: var(--studio-inset) !important; border: 1px solid var(--aurora-border); border-radius: 12px !important; }
+.studio-modal .n-upload-dragger { background: var(--studio-inset); border: 1px dashed #a99cff; border-radius: 16px; }
+.studio-modal .n-descriptions { overflow-x: auto; }
+.studio-modal .n-form-item-blank { min-width: 0; }
+.studio-modal img { max-width: 100%; }
+.sidebar-container .n-menu-item-group-title { font-size: 11px; letter-spacing: .06em; }
+.sidebar-container .n-menu-item-content-header { font-size: 13px; }
+
+@media (max-width: 1100px) {
+  .studio-heading { gap: 16px; padding: 24px; }
+  .studio-metric { min-width: 74px; padding: 10px; }
+  .studio-page.studio-settings .n-tabs--left .n-tabs-nav { min-width: 135px; }
+}
+@media (max-width: 760px) {
+  .studio-page .n-form-item-blank { min-width: 0; }
+  .studio-page .n-input, .studio-page .n-select { max-width: 100%; }
+  .studio-heading { align-items: stretch; flex-direction: column; padding: 22px; }
+  .studio-heading h1 { font-size: 24px; }
+  .studio-heading-star { display: none; }
+  .studio-metrics { width: 100%; }
+  .studio-metric { flex: 1; }
+  .studio-page > .n-card > .n-card__content { padding: 14px; }
+  .studio-toolbar, .studio-filter-form { padding: 8px 0; }
+  .studio-page .studio-toolbar > div { max-width: 100%; }
+  .studio-page .n-pagination { justify-content: flex-start !important; overflow-x: auto; }
+  .studio-page.studio-editor .button-group { flex-wrap: wrap; }
+  .studio-page.studio-editor .markdown-editor-container { height: 65vh; min-height: 420px; }
+  .studio-page.page-setting .info-container { flex-direction: column; gap: 20px; padding: 18px; }
+  .studio-page.page-setting .info-container .n-form { margin-left: 0 !important; max-width: 100%; }
+  .studio-page.page-talklist .talk-list { padding-left: 16px; }
+  .studio-page.page-talklist .talk-item { padding: 16px; }
+  .studio-page.page-talklist .talk-item::before { left: -24px; }
+  .studio-modal .n-form-item { flex-wrap: wrap; }
+  .studio-modal .n-form-item-label { max-width: 100%; }
+  .studio-page.studio-settings .n-tabs--top .n-tab-pane { padding-top: 20px; }
+}
+@media (hover: none) {
+  .studio-page.studio-gallery .photo-overlay { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

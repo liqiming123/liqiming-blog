@@ -1,0 +1,105 @@
+:root {
+  color-scheme: dark;
+  --aurora-primary: #b6a0f5;
+  --aurora-primary-soft: #282c51;
+  --aurora-pink: #f59abb;
+  --aurora-cyan: #72c8e8;
+  --aurora-mint: #63d7b0;
+  --aurora-yellow: #f6c875;
+  --aurora-bg: #080e1d;
+  --aurora-panel: rgba(13, 20, 37, 0.88);
+  --aurora-card: #10182b;
+  --aurora-card-dark: #171a31;
+  --aurora-card-dark-soft: #202441;
+  --aurora-text: #edf0ff;
+  --aurora-muted: #a3afc7;
+  --aurora-border: rgba(115, 142, 199, 0.26);
+  --aurora-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+}
+
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  color: var(--aurora-text);
+  background:
+    radial-gradient(circle at 88% 5%, rgba(139, 124, 246, 0.14), transparent 26rem),
+    radial-gradient(circle at 30% 90%, rgba(245, 154, 187, 0.1), transparent 25rem),
+    var(--aurora-bg);
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+#app {
+  width: 100%;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a99cff, #f0a6c0);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8b7cf6, #ee83aa);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* 动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+/* 工具类 */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

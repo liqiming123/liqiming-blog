@@ -55,3 +55,8 @@ package/
 *.p12
 *.pfx
 docs/private/
+
+# 管理后台运行时数据与本地环境（含密码哈希/会话/访客指纹，绝不入库）
+server/data/
+server/.env
+admin/.env.*

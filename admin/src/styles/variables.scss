@@ -1,0 +1,45 @@
+/* SCSS 变量 */
+// 主题色
+$primary-color: #8B7CF6;
+$success-color: #63D7B0;
+$warning-color: #F6C875;
+$danger-color: #F58DAE;
+$info-color: #72C8E8;
+
+// 文字颜色
+$text-primary: #27283F;
+$text-regular: #60627B;
+$text-secondary: #9295AC;
+$text-placeholder: #B9BBD0;
+
+// 边框颜色
+$border-base: #DDD9F2;
+$border-light: #E9E6F6;
+$border-lighter: #F0EDF9;
+$border-extra-light: #F7F5FC;
+
+// 背景色
+$bg-color: #F6F4FF;
+$bg-color-page: #F6F4FF;
+
+// 字体
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  'Noto Color Emoji';
+
+// 字号
+$font-size-extra-large: 20px;
+$font-size-large: 18px;
+$font-size-medium: 16px;
+$font-size-base: 14px;
+$font-size-small: 13px;
+$font-size-extra-small: 12px;
+
+// 边框圆角
+$border-radius-base: 12px;
+$border-radius-small: 8px;
+$border-radius-large: 18px;
+$border-radius-round: 20px;
+
+// 间距
+$spacing-base: 4px;
