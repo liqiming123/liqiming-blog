@@ -44,6 +44,8 @@
 
 ## 功能特性
 
+- **全栈管理后台**：`admin/`（Vue3）+ `server/`（Hono）提供在线写作与运营闭环——文章/说说/相册/友链/书签/公告/关于页管理、Artalk 评论管理、用户与角色、审计与异常日志；写操作自动触发构建发布（原子交换，约 40 秒上线）。详见 [docs/admin/](docs/admin/)。
+- **自建访客统计（观星台）**：前台埋点 + ip2region 离线地域解析 + 指纹去重（不存明文 IP），仪表盘含趋势、热门文章与 3D 地球仪地域分布；前台侧栏"热门文章"由同一份数据构建期直读生成，零客户端 JS。
 - **内容优先**：Markdown / MDX 写作，文章分类、标签、时间归档、系列文章与阅读目录。
 - **全文搜索**：Pagefind 在构建阶段生成索引，浏览器端搜索文章，无需搜索服务。
 - **个性化外观**：明暗主题、主题色、壁纸轮播、侧栏与文章布局配置，支持移动端响应式布局。
@@ -70,6 +72,8 @@
 | Pagefind | 构建时索引与浏览器端全文搜索 |
 | Swup | 页面切换与过渡效果 |
 | Artalk 2.10.0 | 自托管评论前端，后端单独部署 |
+| Hono + node:sqlite | 管理后台 API 服务（会话、审计、访客统计、发布管线触发） |
+| Vue 3 + Naive UI + echarts | 管理后台 SPA 与数据可视化（含 echarts-gl 地球仪） |
 | Live2D / Pio | 看板娘模型、动作与交互菜单 |
 | Biome + pnpm + GitHub Actions | 格式化、依赖管理、类型检查与生产构建 |
 
@@ -187,6 +191,7 @@ draft: false
 | 功能 | 本地体验 / 自行部署时如何处理 |
 | --- | --- |
 | Artalk 评论 | 仅浏览文章时可将 `commentConfig.type` 设为 `"none"`；启用评论时替换 `artalk.server` 为自己的服务地址，并让后端站点名与 `siteConfig.title` 一致。 |
+| 管理后台 | `admin/` 与 `server/` 为本站自建，可独立于博客运行；不含任何密钥与数据文件（`server/.env`、`server/data/` 已被 gitignore），部署方式见 [docs/admin/](docs/admin/)。 |
 | 看板娘 AI 聊天 | 仅展示模型时，将 `live2dWidgetConfig.chat.enable` 设为 `false`；启用对话时将 `chat.apiEndpoint` 指向自己的代理。 |
 | AI 密钥 | 保存在服务端代理中。前端 `chat.apiKey` 保持空字符串，静态站配置中的密钥会进入构建产物。 |
 | 其他外部内容 | 音乐、在线图源等是否可用取决于对应服务和网络环境。 |
@@ -211,6 +216,8 @@ liqiming-blog/
 │   ├── types/          # 类型定义
 │   └── utils/          # 内容、日期、Feed 等工具
 ├── public/             # 图标、看板娘模型、Artalk 前端等静态文件
+├── admin/              # 管理后台 SPA（Vue3 + Naive UI，构建产物部署到 /admin/）
+├── server/             # 管理后台 API（Hono + node:sqlite，.env 与 data/ 不入库）
 ├── scripts/            # 内容生成与构建后处理
 ├── docs/               # 演示截图与部署说明
 ├── .github/            # CI 与问题模板
