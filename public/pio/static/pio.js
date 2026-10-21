@@ -20,6 +20,20 @@ var Paul_Pio = function (prop) {
 		root: document.location.origin + "/",
 	};
 
+	// 记住访客上次选的宠物（跨页面、跨会话）
+	const STORAGE_KEY = "qiming-pio-model";
+	const saveIdol = () => {
+		try {
+			window.localStorage.setItem(STORAGE_KEY, String(current.idol));
+		} catch (error) {}
+	};
+	try {
+		const saved = parseInt(window.localStorage.getItem(STORAGE_KEY), 10);
+		if (Number.isInteger(saved) && saved >= 0 && saved < prop.model.length) {
+			current.idol = saved;
+		}
+	} catch (error) {}
+
 	// 工具通用函数
 	const tools = {
 		// 创建内容
@@ -63,6 +77,21 @@ var Paul_Pio = function (prop) {
 
 			return current.idol;
 		},
+		// 切换到指定宠物并记住选择
+		switchModel: (index) => {
+			if (
+				!Number.isInteger(index) ||
+				index < 0 ||
+				index >= prop.model.length
+			) {
+				return current.idol;
+			}
+			current.idol = index;
+			loadlive2d("pio", prop.model[index]);
+			saveIdol();
+
+			return current.idol;
+		},
 		// 创建对话框方法
 		message: (text, options = {}) => {
 			const { dialog } = elements;
@@ -85,6 +114,8 @@ var Paul_Pio = function (prop) {
 	};
 
 	this.message = modules.message;
+	this.switchModel = modules.switchModel;
+	this.currentModel = () => current.idol;
 
 	/* - 提示操作 */
 	const action = {
@@ -172,7 +203,14 @@ var Paul_Pio = function (prop) {
 			// 更换模型
 			if (prop.model && prop.model.length > 1) {
 				elements.skin.onclick = () => {
+					// 站点提供了命名宠物切换面板时，优先交给它弹出
+					if (prop.events && typeof prop.events.onSwitchPet === "function") {
+						prop.events.onSwitchPet();
+						return;
+					}
+
 					loadlive2d("pio", prop.model[modules.idol()]);
+					saveIdol();
 
 					prop.content.skin &&
 						modules.message(prop.content.skin[1] || "新衣服真漂亮~");
@@ -289,7 +327,7 @@ var Paul_Pio = function (prop) {
 		if (!(prop.hidden && tools.isMobile())) {
 			if (!noModel) {
 				action.welcome();
-				loadlive2d("pio", prop.model[0]);
+				loadlive2d("pio", prop.model[current.idol] || prop.model[0]);
 			}
 
 			switch (prop.mode) {

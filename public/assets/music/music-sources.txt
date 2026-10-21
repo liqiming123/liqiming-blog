@@ -1,0 +1,6 @@
+# 音乐来源说明
+# 播放列表共 10 首，全部通过网易云公开接口（Meting API）解析：
+#   音频 https://api.injahow.cn/meting/?server=netease&type=url&id=<歌曲ID>
+#   封面 https://api.injahow.cn/meting/?server=netease&type=pic&id=<封面ID>
+# 商业版权歌曲公开接口仅提供 30 秒试听片段（平台规则）。
+# 使一颗心免于哀伤-哼唱.mp3 为主题自带演示文件（当前未加入播放列表）。
