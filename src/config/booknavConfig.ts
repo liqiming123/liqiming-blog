@@ -1,3 +1,4 @@
+import booknavData from "@/data/booknav.json";
 import type { BooknavGroup, BooknavPageConfig } from "../types/booknavConfig";
 
 // 书签导航页面配置
@@ -21,129 +22,8 @@ export const booknavPageConfig: BooknavPageConfig = {
 	},
 };
 
-// 书签导航配置
-// 每个数组项是一个分类组，分类组内的 items 是该分类下的书签
-export const booknavConfig: BooknavGroup[] = [
-	{
-		id: "dev",
-		name: "开发",
-		icon: "material-symbols:code-rounded",
-		desc: "写代码时离不开的站点",
-		weight: 100,
-		items: [
-			{
-				title: "GitHub",
-				url: "https://github.com",
-				desc: "全球最大的代码托管平台",
-				// icon 字段可以使用 astro-icon 图标库的图标名称
-				// 也可以使用图片 URL 和本地图片路径
-				// 不填则会通过接口自动获取目标站点的 favicon 图标（需要在上面配置）
-				icon: "fa7-brands:github",
-				weight: 10,
-			},
-			{
-				title: "MDN Web Docs",
-				url: "https://developer.mozilla.org",
-				desc: "最权威的 Web 技术文档",
-				weight: 9,
-			},
-			{
-				title: "Astro",
-				url: "https://astro.build",
-				desc: "内容驱动型网站的 Web 框架",
-				weight: 8,
-			},
-			{
-				title: "Svelte",
-				url: "https://svelte.dev",
-				desc: "把组件编译成高效原生 JS 的框架",
-				weight: 7,
-			},
-			{
-				title: "Tailwind CSS",
-				url: "https://tailwindcss.com",
-				desc: "一个功能强大且灵活的 CSS 框架",
-				weight: 6,
-			},
-		],
-	},
-	{
-		id: "opensource",
-		name: "项目",
-		icon: "material-symbols:code-rounded",
-		desc: "好用的开源项目",
-		weight: 90,
-		items: [
-			{
-				title: "启明的博客",
-				url: "https://liqiming.top/",
-				desc: "AI 资讯与技术实践",
-				icon: "/favicon/firefly-32.png",
-				weight: 10,
-			},
-		],
-	},
-	{
-		id: "design",
-		name: "设计",
-		icon: "material-symbols:palette-outline-rounded",
-		desc: "配色、图标与灵感来源",
-		weight: 90,
-		items: [
-			{
-				title: "Iconify",
-				url: "https://icon-sets.iconify.design",
-				desc: "海量开源图标集合搜索",
-				weight: 10,
-			},
-			{
-				title: "iconfont",
-				url: "https://www.iconfont.cn",
-				desc: "阿里巴巴矢量图标库",
-				weight: 9,
-			},
-		],
-	},
-	{
-		id: "tools",
-		name: "工具",
-		icon: "material-symbols:build-outline-rounded",
-		desc: "顺手的在线小工具",
-		weight: 80,
-		items: [
-			{
-				title: "TinyPNG",
-				url: "https://tinypng.com",
-				desc: "在线压缩 PNG / JPEG 图片",
-				weight: 10,
-			},
-			{
-				title: "Squoosh",
-				url: "https://squoosh.app",
-				desc: "Google 出品的图片压缩与格式转换",
-				weight: 9,
-			},
-			{
-				title: "Carbon",
-				url: "https://carbon.now.sh",
-				desc: "把代码片段生成漂亮的图片",
-				weight: 8,
-			},
-		],
-	},
-	{
-		id: "resources",
-		name: "资源",
-		icon: "material-symbols:auto-stories-outline-rounded",
-		desc: "文档、教程与阅读",
-		weight: 70,
-		items: [
-			{
-				title: "启明 AI 文章",
-				url: "/archive/",
-				desc: "最新 AI 资讯与技术笔记",
-				weight: 10,
-			},
-		],
-	},
-];
+// 书签导航数据：已迁移到 src/data/booknav.json（ADR-7 结构化配置 JSON 化），
+// 本文件只是薄导入层保持既有 import 路径不变。
+// 管理后台「书签导航」页面读写同一份 JSON，保存后自动触发构建上线；
+// 手动编辑也直接改 JSON：每个数组项是一个分类组，组内 items 为该书签分类下的站点。
+export const booknavConfig = booknavData as BooknavGroup[];

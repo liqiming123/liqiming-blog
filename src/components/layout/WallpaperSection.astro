@@ -564,7 +564,7 @@ const wallpaperPosition = state.isFullscreenMode
 
     <!-- Water waves effect - 如果允许切换或任一设备启用则渲染 -->
     {state.shouldRenderWaves ? (
-    <div class={`waves absolute -bottom-px h-[10vh] max-h-37.5 min-h-12.5 w-full md:h-[15vh]
+    <div class={`waves pointer-events-none absolute -bottom-px h-[10vh] max-h-37.5 min-h-12.5 w-full md:h-[15vh]
         ${!state.wavesEnabledOnMobile ? 'hidden' : ''} ${!state.wavesEnabledOnDesktop ? 'md:hidden' : ''} ${state.wavesEnabledOnDesktop ? 'md:block' : ''}`}
         id="header-waves"
         style="transform: translateZ(0);">

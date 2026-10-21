@@ -99,8 +99,8 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 	// 右侧边栏组件配置列表
 	rightComponents: [
 		{
-			// 组件类型：最新动态组件
-			type: "dynamic",
+			// 组件类型：热门文章（按观星台浏览量排行）
+			type: "popular",
 			// 是否启用该组件
 			enable: true,
 			// 组件位置
@@ -109,9 +109,9 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			showOnPostPage: true,
 			// 组件专属配置
 			specificConfig: {
-				dynamic: {
-					// 显示的最新动态数量
-					limit: 2,
+				popular: {
+					// 显示的排行数量
+					limit: 5,
 				},
 			},
 		},
@@ -277,17 +277,17 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			},
 		},
 		{
-			// 组件类型：最新动态组件
-			type: "dynamic",
+			// 组件类型：热门文章（按观星台浏览量排行）
+			type: "popular",
 			// 是否启用该组件
 			enable: true,
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 组件专属配置
 			specificConfig: {
-				dynamic: {
-					// 显示的最新动态数量
-					limit: 2,
+				popular: {
+					// 显示的排行数量
+					limit: 5,
 				},
 			},
 		},

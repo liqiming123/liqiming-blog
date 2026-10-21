@@ -6,27 +6,27 @@ import { url } from "@/utils/url-utils";
 
 const config = musicPlayerConfig;
 
-const localPlaylist =
-	config.mode === "local" && config.local?.playlist
-		? config.local.playlist.map((song) => {
-				const isFullUrl = (path: string) => /^https?:\/\//.test(path);
-				return {
-					name: song.name,
-					artist: song.artist,
-					url: isFullUrl(song.url) ? song.url : url(song.url),
-					pic: song.cover
-						? isFullUrl(song.cover)
-							? song.cover
-							: url(song.cover)
-						: undefined,
-					lrc: song.lrc
-						? isFullUrl(song.lrc)
-							? song.lrc
-							: url(song.lrc)
-						: undefined,
-				};
-			})
-		: [];
+// 本地歌单不再限定 local 模式才构建：meting 模式下它会被拼在在线歌单前面
+const localPlaylist = config.local?.playlist
+	? config.local.playlist.map((song) => {
+			const isFullUrl = (path: string) => /^https?:\/\//.test(path);
+			return {
+				name: song.name,
+				artist: song.artist,
+				url: isFullUrl(song.url) ? song.url : url(song.url),
+				pic: song.cover
+					? isFullUrl(song.cover)
+						? song.cover
+						: url(song.cover)
+					: undefined,
+				lrc: song.lrc
+					? isFullUrl(song.lrc)
+						? song.lrc
+						: url(song.lrc)
+					: undefined,
+			};
+		})
+	: [];
 
 const managerConfigStr = JSON.stringify({
 	mode: config.mode,
@@ -152,7 +152,7 @@ const managerConfigStr = JSON.stringify({
                 var data = await res.json();
 
                 if (Array.isArray(data) && data.length > 0) {
-                    state.playlist = data.map(function (item) {
+                    var metingTracks = data.map(function (item) {
                         return {
                             name: item.title || item.name || 'Unknown',
                             artist: item.author || item.artist || 'Unknown',
@@ -161,6 +161,8 @@ const managerConfigStr = JSON.stringify({
                             lrc: item.lrc
                         };
                     });
+                    // 本地歌曲（如主题自带演示曲）排最前，在线歌单跟在后面
+                    state.playlist = (config.localPlaylist || []).concat(metingTracks);
                     return;
                 }
             } catch (e) {

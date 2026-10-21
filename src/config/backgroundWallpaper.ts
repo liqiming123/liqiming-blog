@@ -87,7 +87,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			// 是否启用主页横幅文字
 			enable: true,
 			// 主页横幅主标题
-			title: "启明的 AI 记录",
+			title: "午安，Mr.图明",
 			// 主页横幅主标题字体大小
 			titleSize: "4.5rem",
 			// 主页横幅副标题
@@ -124,7 +124,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 				{
 					// 原本指向 /archive/，改为自建的 AI 应用生成平台。
 					// showName 让文字和图标一起显示，和左边的「关于启明」保持一致
-					name: "ai生成",
+					name: "ai生成网站",
 					icon: "material-symbols:auto-awesome",
 					url: "https://ai.liqiming.top/",
 					showName: true,

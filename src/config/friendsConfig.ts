@@ -1,5 +1,9 @@
+import friendsData from "@/data/friends.json";
 import type { FriendLink, FriendsPageConfig } from "../types/friendsConfig";
 
+// 友链数据已迁移到 src/data/friends.json（ADR-7 结构化配置 JSON 化）：
+// 管理后台「友链管理」直接读写这份 JSON，前台构建时读取渲染，两边同一份数据。
+// 字段：title(名称) / imgurl(头像) / desc(描述) / siteurl(地址) / tags / weight(权重) / enabled
 // 可以在src/content/spec/friends.md中编写友链页面下方的自定义内容
 
 // 友链页面配置
@@ -21,7 +25,7 @@ export const friendsPageConfig: FriendsPageConfig = {
 };
 
 // 友链配置
-export const friendsConfig: FriendLink[] = [];
+export const friendsConfig: FriendLink[] = friendsData as FriendLink[];
 
 // 获取启用的友链并进行排序
 export const getEnabledFriends = (): FriendLink[] => {

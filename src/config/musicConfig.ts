@@ -9,6 +9,13 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	showInSidebar: true,
 
 	// 使用方式："meting" 使用 Meting API，"local" 使用本地音乐列表
+	// 当前用 local 模式 + 网易接口直链：local.playlist 的 url 字段支持完整 URL，
+	// 直接填 Meting API 的单曲地址即可——既不往仓库/服务器存音频文件，
+	// 又能精确控制列表只有这 10 首（meting 模式会整张歌单拉进来，没法挑）。
+	// 注意：商业版权歌曲走公开接口只有 30 秒试听片段（平台规则，非 bug）。
+	// 音频 https://api.injahow.cn/meting/?server=netease&type=url&id=<歌曲ID>
+	// 封面 https://api.injahow.cn/meting/?server=netease&type=pic&id=<封面ID>
+	// 换歌只需替换 id；主题会自动对每个 meting 链接生成备用源，主接口挂了自动切换
 	mode: "local",
 
 	// 默认音量 (0-1)
@@ -20,38 +27,101 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	// 是否显启用歌词
 	showLyrics: false,
 
-	// Meting API 配置
+	// Meting API 配置（当前 mode=local，此段不生效，保留备用）
 	meting: {
-		// Meting API 地址
-		// 默认使用官方 API，也可以使用自定义 API
-		api: "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
-		// 音乐平台：netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
+		api: "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
 		server: "netease",
-		// 类型：song=单曲, playlist=歌单, album=专辑, search=搜索, artist=艺术家
 		type: "playlist",
-		// 歌单/专辑/单曲 ID 或搜索关键词
-		id: "10046455237",
-		// 认证 token（可选）
+		id: "440999611",
 		auth: "",
-		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis: [
-			"https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
+			"https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
 			"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
 		],
 	},
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）
-	// 1. 支持传入歌词文件的路径
-	// lrc: "/assets/music/lrc/使一颗心免于哀伤-哼唱.lrc",
-	// 2. 或者直接填入歌词字符串内容
-	// lrc: "[00:00.00]歌词内容...",
+	// 10 首高热动漫主题曲，全部经网易云接口解析（30 秒试听）
 	local: {
 		playlist: [
 			{
-				name: "使一颗心免于哀伤",
-				artist: "知更鸟 / HOYO-MiX / Chevy",
-				url: "/assets/music/使一颗心免于哀伤-哼唱.mp3",
-				cover: "/assets/music/cover/109951169585655912.webp",
+				name: "紅蓮華（鬼灭之刃）",
+				artist: "LiSA",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=1360592706",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951166199033558",
+				lrc: "",
+			},
+			{
+				name: "前前前世（你的名字。）",
+				artist: "RADWIMPS",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=426881487",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951171836647530",
+				lrc: "",
+			},
+			{
+				name: "unravel（东京喰种）",
+				artist: "TK from 凛として時雨",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=29017078",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951169033080950",
+				lrc: "",
+			},
+			{
+				name: "ブルーバード 青鸟（火影忍者）",
+				artist: "いきものがかり",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=718765",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951166200194461",
+				lrc: "",
+			},
+			{
+				name: "勇者（葬送的芙莉莲）",
+				artist: "YOASOBI",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=2083182016",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951168924619987",
+				lrc: "",
+			},
+			{
+				name: "SPECIALZ（咒术回战）",
+				artist: "King Gnu",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=2074163984",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951168848035270",
+				lrc: "",
+			},
+			{
+				name: "残酷な天使のテーゼ（EVA）",
+				artist: "高橋洋子",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=657666",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951172618401349",
+				lrc: "",
+			},
+			{
+				name: "only my railgun（某科学的超电磁炮）",
+				artist: "fripSide",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=725692",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951171943110642",
+				lrc: "",
+			},
+			{
+				name: "βios（罪恶王冠）",
+				artist: "小林未郁",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=498096",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951166197895701",
+				lrc: "",
+			},
+			{
+				name: "aLIEz（Aldnoah.Zero）",
+				artist: "SawanoHiroyuki[nZk]mizuki",
+				url: "https://api.injahow.cn/meting/?server=netease&type=url&id=29307041",
+				cover:
+					"https://api.injahow.cn/meting/?server=netease&type=pic&id=109951167842313044",
 				lrc: "",
 			},
 		],

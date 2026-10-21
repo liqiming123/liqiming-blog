@@ -2,6 +2,7 @@
 import GoogleAnalytics from "@components/analytics/GoogleAnalytics.astro";
 import La51Analytics from "@components/analytics/La51Analytics.astro";
 import MicrosoftClarity from "@components/analytics/MicrosoftClarity.astro";
+import SelfStatsReport from "@components/analytics/SelfStatsReport.astro";
 import UmamiAnalytics from "@components/analytics/UmamiAnalytics.astro";
 import CodeGroupManager from "@components/features/CodeGroupManager.astro";
 import FancyboxManager from "@components/features/FancyboxManager.astro";
@@ -165,6 +166,8 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
     {analyticsConfig?.googleAnalyticsId && (
             <GoogleAnalytics analyticsId={analyticsConfig.googleAnalyticsId} />
     )}
+    {/* 自建访客统计上报（Admin 管理台数据源，仅在配置了 PUBLIC_ADMIN_STATS_URL 时启用） */}
+    <SelfStatsReport />
     {analyticsConfig?.microsoftClarityId && (
             <MicrosoftClarity clarityId={analyticsConfig.microsoftClarityId} />
     )}

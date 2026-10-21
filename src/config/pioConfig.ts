@@ -86,11 +86,13 @@ export const spineModelConfig: SpineModelConfig = {
 export const live2dWidgetConfig: Live2DWidgetConfig = {
 	// Live2D 看板娘开关
 	enable: true,
-	// 模型配置，支持单个模型或数组（多模型切换）
+	// 宠物列表：点击看板娘旁边的「宠物」按钮可切换，选择会记在浏览器里。
+	// 想加新宠物：把 Cubism 2 模型目录放进 public/pio/models/live2d/，再在这里加一项即可
 	model: [
 		{
-			// 从 Mizuki 主题迁移的 Pio 模型
-			path: "/pio/models/live2d/pio/model.json",
+			// 从 Mizuki 主题迁移的 Pio 模型（默认服装）
+			path: "/pio/models/live2d/pio/model.json?v=2",
+			name: "小明",
 			// 动作声音音量 范围0~1，默认 0（静音）
 			volume: 0,
 			// 模型缩放比例
@@ -99,6 +101,51 @@ export const live2dWidgetConfig: Live2DWidgetConfig = {
 			x: 0,
 			// Y轴偏移，范围 -2~2，正值向上
 			y: 0,
+			// 动作面板按钮，group 对应 model.json 里的 motions 分组
+			motions: [
+				{ label: "打起精神", group: "idle" },
+				{ label: "摸摸头", group: "flick_head" },
+				{ label: "戳一戳", group: "tap_body" },
+				{ label: "打个瞌睡", group: "sleepy" },
+			],
+		},
+		{
+			// 同一个 Pio 模型换贴图：睡衣
+			path: "/pio/models/live2d/pio/model-pajamas.json?v=2",
+			name: "小明 · 睡衣",
+			volume: 0,
+			scale: 1.05,
+			motions: [
+				{ label: "打起精神", group: "idle" },
+				{ label: "摸摸头", group: "flick_head" },
+				{ label: "戳一戳", group: "tap_body" },
+				{ label: "打个瞌睡", group: "sleepy" },
+			],
+		},
+		{
+			// 同一个 Pio 模型换贴图：校服
+			path: "/pio/models/live2d/pio/model-school.json?v=2",
+			name: "小明 · 校服",
+			volume: 0,
+			scale: 1.05,
+			motions: [
+				{ label: "打起精神", group: "idle" },
+				{ label: "摸摸头", group: "flick_head" },
+				{ label: "戳一戳", group: "tap_body" },
+				{ label: "打个瞌睡", group: "sleepy" },
+			],
+		},
+		{
+			// 雪初音（备用模型，只有 idle 动作组；她的双马尾较宽，
+			// 显示宽度在模型 json 的 layout.width 里调小了，避免溢出画布）
+			path: "/pio/models/live2d/snow_miku/model.json?v=2",
+			name: "雪初音",
+			volume: 0,
+			scale: 1.0,
+			motions: [{ label: "动一动", group: "idle" }],
+			// 雪初音有自己的人格，聊天时会用它替换 chat.systemPrompt
+			systemPrompt:
+				"你是启明个人博客的看板娘，名字叫雪初音。说话温柔、优雅、简短，像雪夜的精灵，可以用 ❄️ 音乐相关的 emoji，但不要油腻。回答控制在 150 字以内，除非对方明确要求展开。遇到不确定的事就坦率说不知道，不要编造。",
 		},
 	],
 	// 显示位置：bottom-left 或 bottom-right

@@ -1,0 +1,111 @@
+---
+import { getCollection } from "astro:content";
+import { existsSync } from "node:fs";
+import { createRequire } from "node:module";
+import { join } from "node:path";
+import { Icon } from "astro-icon/components";
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+import type { WidgetComponentConfig } from "@/types/config";
+import { url } from "@/utils/url-utils";
+
+interface Props {
+	class?: string;
+	style?: string;
+	widgetConfig?: WidgetComponentConfig;
+}
+
+const { class: className, style, widgetConfig } = Astro.props;
+const showTitle = widgetConfig?.showTitle !== false;
+const configuredLimit = widgetConfig?.specificConfig?.popular?.limit ?? 5;
+const limit = Math.max(1, Math.floor(configuredLimit));
+
+// 浏览量来自管理台 SQLite（page_views 表，观星台同一数据源）。
+// 构建在服务器上执行，库就在同级 server/data/admin.db；本地开发同样相对可达。
+const readViewMap = (): Map<string, number> => {
+	const dbPath = [
+		process.env.ADMIN_DB_PATH,
+		// 服务器构建：/opt/firefly-admin/{blog,server}
+		join(process.cwd(), "../server/data/admin.db"),
+		// 本地开发：<repo>/server/data/admin.db
+		join(process.cwd(), "server/data/admin.db"),
+		"/opt/firefly-admin/server/data/admin.db",
+	].find((p): p is string => Boolean(p) && existsSync(p as string));
+	if (!dbPath) return new Map();
+	try {
+		const require = createRequire(import.meta.url);
+		const { DatabaseSync } = require("node:sqlite");
+		const db = new DatabaseSync(dbPath, { readOnly: true });
+		const rows = db
+			.prepare(
+				"SELECT path, SUM(views) AS v FROM page_views WHERE path LIKE '/posts/%' GROUP BY path",
+			)
+			.all() as { path: string; v: number }[];
+		db.close();
+		return new Map(rows.map((r) => [r.path, Number(r.v) || 0]));
+	} catch {
+		return new Map();
+	}
+};
+
+const viewMap = readViewMap();
+const posts = await getCollection("posts");
+const ranked = posts
+	.filter((p) => !p.data.draft)
+	.map((p) => ({
+		title: p.data.title,
+		href: url(`/posts/${p.id.replace(/\.(md|mdx)$/, "")}/`),
+		views: viewMap.get(`/posts/${p.id.replace(/\.(md|mdx)$/, "")}/`) ?? 0,
+		pubDate: p.data.published,
+	}))
+	.sort((a, b) => b.views - a.views || +b.pubDate - +a.pubDate)
+	.slice(0, limit);
+---
+
+<WidgetLayout
+	name="热门文章"
+	showTitle={showTitle}
+	id="popular-posts"
+	class={className}
+	style={style}
+>
+	{ranked.length === 0 ? (
+		<p class="m-0 p-3 text-center text-sm text-neutral-500">
+			暂无访问数据
+		</p>
+	) : (
+		<ol class="m-0 flex list-none flex-col gap-1 p-0">
+			{ranked.map((post, index) => (
+				<li>
+					<a
+						href={post.href}
+						class="group flex min-w-0 items-center gap-2 rounded-lg p-2 text-sm
+							text-neutral-700/75 transition-colors hover:bg-(--btn-plain-bg-hover)
+							hover:text-(--primary) dark:text-neutral-300/75"
+					>
+						<span
+							class:list={[
+								"grid size-5 shrink-0 place-items-center rounded-md text-xs font-bold tabular-nums",
+								index < 3
+									? "bg-(--primary) text-white"
+									: "bg-black/5 text-neutral-500 dark:bg-white/10",
+							]}
+						>
+							{index + 1}
+						</span>
+						<span class="min-w-0 flex-1 truncate transition-colors">
+							{post.title}
+						</span>
+						<span class="flex shrink-0 items-center gap-0.5 text-xs tabular-nums opacity-60">
+							<Icon
+								name="material-symbols:visibility-rounded"
+								class="size-3.5"
+								aria-hidden="true"
+							/>
+							{post.views}
+						</span>
+					</a>
+				</li>
+			))}
+		</ol>
+	)}
+</WidgetLayout>

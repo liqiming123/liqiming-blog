@@ -24,7 +24,7 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
         </header>
         <nav class="mobile-menu-list">
             {processedLinks.map((link, index) => (
-                <div class="mobile-menu-item-root">
+                <div class="mobile-menu-item-root" data-requires-role={link.requireRole} style={link.requireRole ? "display:none" : undefined}>
                     {link.children && link.children.length > 0 ? (
                         /* 有子菜单的项目：MD3 手风琴 */
                         <div class="mobile-dropdown" data-mobile-dropdown>
@@ -45,6 +45,7 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
                                 {link.children.map((child) => (
                                     <a
                                         href={child.external ? child.url : url(child.url)}
+                        data-no-swup={child.url.startsWith("/admin") ? "" : undefined}
                                         class="mobile-menu-item"
                                         data-nav-href={child.external ? undefined : url(child.url)}
                                         target={child.external ? "_blank" : null}
@@ -63,6 +64,7 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
                         /* 普通链接项目 */
                         <a
                             href={link.external ? link.url : url(link.url)}
+                        data-no-swup={link.url.startsWith("/admin") ? "" : undefined}
                             class="mobile-menu-item"
                             data-nav-href={link.external ? undefined : url(link.url)}
                             target={link.external ? "_blank" : null}

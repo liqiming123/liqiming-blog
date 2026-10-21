@@ -7,6 +7,9 @@ interface Props {
 		model:
 			| {
 					path: string;
+					name?: string;
+					motions?: { label: string; group: string }[];
+					systemPrompt?: string;
 					volume?: number;
 					scale?: number;
 					x?: number;
@@ -14,6 +17,9 @@ interface Props {
 			  }
 			| {
 					path: string;
+					name?: string;
+					motions?: { label: string; group: string }[];
+					systemPrompt?: string;
 					volume?: number;
 					scale?: number;
 					x?: number;
@@ -25,6 +31,8 @@ interface Props {
 			enable?: boolean;
 			welcomeMessage?: string[];
 			messages?: string[];
+			duration?: number;
+			interval?: number;
 		};
 		responsive?: { hideOnMobile?: boolean; mobileBreakpoint?: number };
 		chat?: {
@@ -55,12 +63,24 @@ interface Props {
 }
 
 const { config } = Astro.props;
-const models = (
-	Array.isArray(config.model) ? config.model : [config.model]
-).map((model) =>
-	/^https?:\/\//.test(model.path) ? model.path : url(model.path),
+const pets = (Array.isArray(config.model) ? config.model : [config.model]).map(
+	(model, index) => ({
+		path: /^https?:\/\//.test(model.path) ? model.path : url(model.path),
+		name: model.name || `看板娘 ${index + 1}`,
+		motions: model.motions?.length
+			? model.motions
+			: [{ label: "动一动", group: "idle" }],
+		systemPrompt: model.systemPrompt || "",
+	}),
 );
+const models = pets.map((pet) => pet.path);
 const tips = config.tips ?? {};
+const tipsConfig = {
+	enable: tips.enable !== false,
+	messages: tips.messages ?? [],
+	duration: tips.duration ?? 3000,
+	interval: tips.interval ?? 6000,
+};
 const dialog = {
 	welcome: tips.welcomeMessage?.[0] ?? "你好呀！我是启明的看板娘~",
 	home: "点击这里回到启明的首页！",
@@ -142,7 +162,7 @@ const chatOptions = chatEnabled
 )}
 
 {config.enable && (
-	<script is:inline define:vars={{ models, dialog, mode, hiddenOnMobile, mobileBreakpoint, chatOptions }}>
+	<script is:inline define:vars={{ models, pets, tipsConfig, dialog, mode, hiddenOnMobile, mobileBreakpoint, chatOptions }}>
 		(() => {
 			const options = {
 				mode,
@@ -150,6 +170,25 @@ const chatOptions = chatEnabled
 				content: dialog,
 				model: models,
 			};
+
+			// 当前宠物下标：与 pio.js 写入 localStorage 的选择保持一致，
+			// 切换宠物后聊天会改用该宠物的人格（若配置了专属 systemPrompt）
+			let activePet = 0;
+			try {
+				const saved = parseInt(
+					window.localStorage.getItem("qiming-pio-model"),
+					10,
+				);
+				if (Number.isInteger(saved) && saved >= 0 && saved < pets.length) {
+					activePet = saved;
+				}
+			} catch (error) {}
+			const currentSystemPrompt = () => pets[activePet]?.systemPrompt || "";
+
+			// 聊天面板与宠物/动作面板互斥展示，互相留一个关闭钩子
+			let closeChatPanel = null;
+			let closePetPanel = null;
+			const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 			const loadScript = (src, id) =>
 				new Promise((resolve, reject) => {
 					const existing = document.getElementById(id);
@@ -240,12 +279,15 @@ const chatOptions = chatEnabled
 					setBusy(false);
 					clearChat();
 				};
+				closeChatPanel = closeChat;
 
 				// 组装上行消息：system + 最近几轮 + 本轮
 				const buildMessages = (userText) => {
 					const out = [];
-					if (cfg.systemPrompt) {
-						out.push({ role: "system", content: cfg.systemPrompt });
+					// 当前宠物配置了专属人格时优先使用（比如雪初音）
+					const persona = currentSystemPrompt() || cfg.systemPrompt;
+					if (persona) {
+						out.push({ role: "system", content: persona });
 					}
 					if (cfg.keepContext) {
 						const history = state.messages.slice(0, -1);
@@ -392,6 +434,7 @@ const chatOptions = chatEnabled
 					const wasDrag = dragging;
 					dragging = false;
 					if (wasDrag) return;
+					closePetPanel && closePetPanel();
 					if (state.open) {
 						closeChat();
 					} else {
@@ -419,6 +462,129 @@ const chatOptions = chatEnabled
 				});
 			};
 
+			// ── 宠物切换 + 动作面板 ──────────────────────────────
+			// 面板挂在 .pio-container 里（Swup 容器之外，切页不重建）。
+			// 切换调用 pio 实例的 switchModel（会重载模型并写 localStorage）；
+			// 动作调用 l2d.js 暴露的 __l2dPlayMotion 按动作组随机播放一个动作。
+			const initPets = () => {
+				const container = document.querySelector(".pio-container");
+				const menu = document.querySelector(".pio-container .pio-action");
+				if (!container || !menu || !window.__qimingPio) return;
+
+				const pio = window.__qimingPio;
+
+				const panel = document.createElement("div");
+				panel.className = "pio-panel";
+				panel.setAttribute("aria-hidden", "true");
+				container.appendChild(panel);
+
+				// 面板上的按下必须止住冒泡，避免触发看板娘拖拽
+				panel.addEventListener("mousedown", (e) => e.stopPropagation());
+
+				let mode = null; // "pet"（切换宠物）| "motion"（动作）| null
+
+				// 动作播完配一句气泡反应，让宠物看起来「有回应」
+				const reactions = {
+					idle: ["嗯！精神满满！", "嗨嗨～今天也要加油哦！"],
+					flick_head: ["好舒服～再摸摸嘛", "嘿嘿，最喜欢摸摸头了"],
+					tap_body: ["干嘛戳我呀！", "再戳就要生气了哦！"],
+					sleepy: ["Zzz…", "好困呀…让我眯一会儿…"],
+				};
+
+				const closePanel = () => {
+					mode = null;
+					panel.classList.remove("active");
+					panel.setAttribute("aria-hidden", "true");
+				};
+				closePetPanel = closePanel;
+
+				const render = () => {
+					panel.textContent = "";
+					if (mode === "pet") {
+						pets.forEach((pet, index) => {
+							const btn = document.createElement("button");
+							btn.type = "button";
+							btn.className =
+								"pio-panel-item" + (index === activePet ? " is-active" : "");
+							btn.textContent = pet.name;
+							btn.addEventListener("click", () => {
+								if (index !== activePet) {
+									activePet = index;
+									pio.switchModel(index);
+									pio.message("我是" + pet.name + "，请多指教～");
+								}
+								closePanel();
+							});
+							panel.appendChild(btn);
+						});
+					} else if (mode === "motion") {
+						pets[activePet].motions.forEach((motion) => {
+							const btn = document.createElement("button");
+							btn.type = "button";
+							btn.className = "pio-panel-item";
+							btn.textContent = motion.label;
+							btn.addEventListener("click", () => {
+								if (window.__l2dPlayMotion) {
+									window.__l2dPlayMotion(motion.group);
+								}
+								pio.message(pick(reactions[motion.group] || ["嗨起来～"]));
+								closePanel();
+							});
+							panel.appendChild(btn);
+						});
+					}
+				};
+
+				const openPanel = (next) => {
+					// 与聊天面板互斥：打开任意一个先收起另一个
+					closeChatPanel && closeChatPanel();
+					mode = mode === next ? null : next;
+					if (mode) {
+						render();
+						panel.classList.add("active");
+						panel.setAttribute("aria-hidden", "false");
+					} else {
+						closePanel();
+					}
+				};
+
+				const addRailButton = (cls, tip, onClick) => {
+					const btn = document.createElement("span");
+					btn.className = cls;
+					btn.title = tip;
+					btn.setAttribute("role", "button");
+					btn.setAttribute("aria-label", tip);
+					btn.addEventListener("click", onClick);
+					btn.addEventListener("mouseover", () => pio.message(tip));
+					// 插到「关于」按钮前面，让宠物相关的按钮靠在一起
+					menu.insertBefore(btn, menu.querySelector(".pio-info"));
+				};
+
+				if (pets.length > 1) {
+					addRailButton("pio-pet", "切换宠物", () => openPanel("pet"));
+					// pio.js 自带的换装按钮也弹出同一个面板（而不是盲切下一只）
+					options.events = { onSwitchPet: () => openPanel("pet") };
+				}
+				addRailButton("pio-motion", "看动作", () => openPanel("motion"));
+
+				document.addEventListener("click", (e) => {
+					if (mode && !container.contains(e.target)) closePanel();
+				});
+				document.addEventListener("keydown", (e) => {
+					if (e.key === "Escape" && mode) closePanel();
+				});
+
+				// 待机随机气泡：让宠物在没人理的时候也会说话
+				if (tipsConfig.enable && tipsConfig.messages.length) {
+					window.setInterval(() => {
+						if (document.visibilityState !== "visible" || mode) return;
+						pio.message(pick(tipsConfig.messages), {
+							time: tipsConfig.duration,
+						});
+					}, Math.max(4000, tipsConfig.interval));
+				}
+			};
+
 			const init = () => {
 				if (window.__qimingPioInitialized || !document.getElementById("pio")) return;
 				if (hiddenOnMobile && window.innerWidth <= mobileBreakpoint) {
@@ -430,22 +596,32 @@ const chatOptions = chatEnabled
 				window.__qimingPioInitialized = true;
 				window.__qimingPio = new window.Paul_Pio(options);
 				initChat();
+				initPets();
 			};
 
+			// l2d.js / pio.js 是本站改过的版本，?v=2 用来打破老访客的浏览器缓存
 			const start = () =>
-				loadScript("/pio/static/l2d.js", "qiming-pio-l2d")
-					.then(() => loadScript("/pio/static/pio.js", "qiming-pio-main"))
+				loadScript("/pio/static/l2d.js?v=2", "qiming-pio-l2d")
+					.then(() => loadScript("/pio/static/pio.js?v=2", "qiming-pio-main"))
 					.then(init)
 					.catch((error) => {
 						window.__qimingPioInitialized = false;
 						console.error("Pio Live2D 初始化失败：", error);
 					});
 
-			if (document.readyState === "loading") {
-				document.addEventListener("DOMContentLoaded", start, { once: true });
-			} else {
-				start();
-			}
+			// 等首屏资源（壁纸、文章封面）下载完再拉看板娘的脚本和模型，
+			// 避免抢同一根带宽管子；load 迟迟不触发（被第三方脚本拖住）时 5 秒兜底
+			let booted = false;
+			const boot = () => {
+				if (booted) return;
+				booted = true;
+				const idle =
+					window.requestIdleCallback ||
+					((cb) => window.setTimeout(cb, 200));
+				idle(() => start());
+			};
+			window.addEventListener("load", boot, { once: true });
+			window.setTimeout(boot, 5000);
 		})();
 	</script>
 )}
@@ -647,8 +823,91 @@ const chatOptions = chatEnabled
 	.dark .pio-chat-send {
 		color: #0b1220;
 	}
-	.pio-chat-send:disabled {
-		cursor: default;
-		opacity: 0.5;
-	}
-</style>
+		.pio-chat-send:disabled {
+			cursor: default;
+			opacity: 0.5;
+		}
+
+		/* ── 宠物切换 / 动作面板 ────────────────────────────
+		   与 .pio-chat 同一套毛玻璃风格，两者互斥展示。 */
+		.pio-panel {
+			position: absolute;
+			left: 1em;
+			/* 完整抬到画布上方：若与 canvas 下移重叠，命中测试会输给 canvas */
+			bottom: calc(100% + 0.25em);
+			z-index: 6;
+			display: flex;
+			flex-direction: column;
+			gap: 0.4em;
+			min-width: 9em;
+			max-width: calc(100vw - 2em);
+			padding: 0.75em;
+			border-radius: 1em;
+			font-size: 0.875rem;
+			color: #173b78;
+			background: rgba(255, 255, 255, var(--pio-chat-alpha, 0));
+			backdrop-filter: blur(var(--pio-chat-blur, 10px));
+			-webkit-backdrop-filter: blur(var(--pio-chat-blur, 10px));
+			border: 1px solid rgba(54, 103, 177, 0.18);
+			box-shadow: 0 8px 30px rgba(23, 59, 120, 0.16);
+			visibility: hidden;
+			opacity: 0;
+			transform: translateY(0.5em);
+			transition:
+				opacity 0.25s ease,
+				visibility 0.25s ease,
+				transform 0.25s ease;
+		}
+		.pio-panel.active {
+			visibility: visible;
+			opacity: 1;
+			transform: translateY(0);
+		}
+		.dark .pio-panel {
+			color: #e5eefc;
+			border-color: rgba(160, 200, 255, 0.22);
+			background: rgba(17, 24, 39, var(--pio-chat-alpha, 0));
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+		}
+		.pio-panel-item {
+			padding: 0.45em 0.8em;
+			border: 1px solid rgba(54, 103, 177, 0.22);
+			border-radius: 0.7em;
+			background: rgba(255, 255, 255, 0.66);
+			color: inherit;
+			font-family: inherit;
+			font-size: 0.95em;
+			cursor: pointer;
+			text-align: left;
+			transition:
+				background 0.2s ease,
+				border-color 0.2s ease;
+		}
+		.pio-panel-item:hover {
+			border-color: var(--primary, #3667b1);
+		}
+		.pio-panel-item.is-active {
+			color: #fff;
+			border-color: transparent;
+			background: var(--primary, #3667b1);
+		}
+		.dark .pio-panel-item {
+			background: rgba(17, 24, 39, 0.62);
+		}
+		.dark .pio-panel-item.is-active {
+			color: #0b1220;
+		}
+
+		/* 操作栏新增的两个按钮：爪印 = 切换宠物，星光 = 看动作 */
+		.pio-action .pio-pet {
+			background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%3E%3Cpath%20d='M512%20672c-108%200-208%2062-208%20148%200%2056%2044%2088%20100%2088%2040%200%2070-16%20108-16s68%2016%20108%2016c56%200%20100-32%20100-88%200-86-100-148-208-148zM288%20420c-52%200-96%2052-96%20116s44%20116%2096%20116%2096-52%2096-116-44-116-96-116zm448%200c-52%200-96%2052-96%20116s44%20116%2096%20116%2096-52%2096-116-44-116-96-116zM432%20244c-52%200-96%2052-96%20116s44%20116%2096%20116%2096-52%2096-116-44-116-96-116zm160%200c-52%200-96%2052-96%20116s44%20116%2096%20116%2096-52%2096-116-44-116-96-116z'/%3E%3C/svg%3E");
+		}
+		.pio-action .pio-motion {
+			background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%3E%3Cpath%20d='M432%2064l70%20210%20210%2070-210%2070-70%20210-70-210-210-70%20210-70zM792%20512l42%20126%20126%2042-126%2042-42%20126-42-126-126-42%20126-42zM264%20656l30%2090%2090%2030-90%2030-30%2090-30-90-90-30%2090-30z'/%3E%3C/svg%3E");
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.pio-panel {
+				transition: none;
+			}
+		}
+	</style>

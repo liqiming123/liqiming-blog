@@ -61,17 +61,20 @@ export type Live2DChatConfig = {
 };
 
 // Live2D 看板娘配置（Pio 运行时）
+export type Live2DModelItem = {
+	path: string; // 模型文件路径 (.json)
+	name?: string; // 宠物名字，展示在切换面板与气泡里
+	volume?: number; // 动作声音音量 范围0~1，默认 0（静音）
+	scale?: number; // 模型缩放比例，默认 1.0
+	x?: number; // X轴偏移，范围 -2~2，正值向右
+	y?: number; // Y轴偏移，范围 -2~2，正值向上
+	motions?: { label: string; group: string }[]; // 动作面板按钮，group 对应模型 motions 分组名
+	systemPrompt?: string; // 该宠物专属人格，留空则用 chat.systemPrompt
+};
+
 export type Live2DWidgetConfig = {
 	enable: boolean; // 是否启用 Live2D 看板娘
-	model:
-		| { path: string; volume?: number; scale?: number; x?: number; y?: number }
-		| {
-				path: string;
-				volume?: number;
-				scale?: number;
-				x?: number; // X轴偏移，范围 -2~2，正值向右
-				y?: number; // Y轴偏移，范围 -2~2，正值向上
-		  }[]; // 模型配置，支持单个或多个模型
+	model: Live2DModelItem | Live2DModelItem[]; // 模型配置，支持单个或多个模型（多模型可切换，选择会记住）
 	position?: "bottom-left" | "bottom-right"; // 显示位置，默认 "bottom-left"
 	size?: number | { width: number; height: number }; // 画布尺寸（px），默认 300
 	primaryColor?: string; // 主题色，用于菜单、状态条等 UI 元素

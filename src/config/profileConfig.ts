@@ -9,7 +9,7 @@ export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.avif",
 
 	// 名字
-	name: "启明",
+	name: "图明",
 
 	// 个人签名
 	bio: "记录 AI 资讯、技术实践与持续学习。",
@@ -25,6 +25,19 @@ export const profileConfig: ProfileConfig = {
 			name: "GitHub",
 			icon: "fa7-brands:github",
 			url: "https://github.com/liqiming123",
+			showName: false,
+		},
+		{
+			// url 以 qq:/wx: 开头时点击弹出号码卡片
+			name: "QQ",
+			icon: "simple-icons:tencentqq",
+			url: "qq:2910739229",
+			showName: false,
+		},
+		{
+			name: "微信",
+			icon: "simple-icons:wechat",
+			url: "wx:15352350355",
 			showName: false,
 		},
 		{

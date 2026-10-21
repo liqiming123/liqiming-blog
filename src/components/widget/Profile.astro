@@ -60,7 +60,15 @@ const className = Astro.props.class;
                         ? "btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95" 
                         : "btn-regular rounded-lg h-10 w-10 active:scale-90";
 
-                    if (item.url.startsWith("mailto:")) {
+                    if (item.url.startsWith("qq:") || item.url.startsWith("wx:")) {
+                        return <button type="button" aria-label={item.name}
+                                    data-contact-type={item.url.startsWith("qq:") ? "qq" : "wx"}
+                                    data-contact-value={item.url.split(":")[1]}
+                                    class={className}>
+                            <Icon name={item.icon} class="text-[1.5rem]"></Icon>
+                            {showName && item.name}
+                        </button>
+                    } else if (item.url.startsWith("mailto:")) {
                         const encodedEmail = encodeMailto(item.url);
                         return <a rel="me" aria-label={item.name} href="#" data-encoded-email={encodedEmail} onclick={MAILTO_ONCLICK_SCRIPT},
                                     class={className}>
@@ -93,4 +101,77 @@ const className = Astro.props.class;
             })(profileConfig.links[0])}
         </div>
   </div>
+
+  <!-- QQ/微信号码弹窗卡片 -->
+  <div id="profile-contact-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.45)" aria-hidden="true">
+    <div class="card-base w-72 rounded-2xl p-5 text-center relative active:scale-95 transition-transform">
+      <button type="button" id="profile-contact-close" aria-label="关闭" class="absolute right-3 top-2.5 text-xl opacity-50 hover:opacity-100 transition-opacity cursor-pointer">×</button>
+      <div id="profile-contact-icons" class="flex justify-center my-1">
+        <span data-ci="qq" class="hidden text-(--primary)"><Icon name="simple-icons:tencentqq" class="text-[2.4rem]" /></span>
+        <span data-ci="wx" class="hidden text-(--primary)"><Icon name="simple-icons:wechat" class="text-[2.4rem]" /></span>
+      </div>
+      <p id="profile-contact-label" class="m-0 text-sm opacity-60"></p>
+      <p id="profile-contact-value" class="m-0 my-2 text-2xl font-bold tracking-wider select-all"></p>
+      <div class="flex gap-2 justify-center mt-3">
+        <button type="button" id="profile-contact-copy" class="btn-regular rounded-lg px-4 py-1.5 text-sm font-bold active:scale-95 cursor-pointer">复制号码</button>
+        <a id="profile-contact-action" href="#" target="_blank" rel="noopener" class="btn-regular rounded-lg px-4 py-1.5 text-sm font-bold active:scale-95 hidden">发起会话</a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+	const modal = document.getElementById("profile-contact-modal");
+	if (modal) {
+		let currentValue = "";
+		document.addEventListener("click", (e) => {
+			const trigger = (e.target as HTMLElement).closest("[data-contact-type]");
+			if (trigger) {
+				e.preventDefault();
+				const type = (trigger as HTMLElement).dataset.contactType;
+				currentValue = (trigger as HTMLElement).dataset.contactValue || "";
+				modal.querySelectorAll("[data-ci]").forEach((el) => {
+					el.classList.toggle("hidden", (el as HTMLElement).dataset.ci !== type);
+				});
+				const label = document.getElementById("profile-contact-label");
+				if (label) {
+					label.textContent =
+						type === "qq" ? "QQ 号（点击号码可选中）" : "微信号（点击号码可选中）";
+				}
+				const valueEl = document.getElementById("profile-contact-value");
+				if (valueEl) {
+					valueEl.textContent = currentValue;
+				}
+				const action = document.getElementById("profile-contact-action");
+				if (type === "qq") {
+					action?.classList.remove("hidden");
+					action?.setAttribute("href", `https://wpa.qq.com/msgrd?v=3&uin=${currentValue}&site=qq&menu=yes`);
+				} else {
+					action?.classList.add("hidden");
+				}
+				modal.classList.remove("hidden");
+				modal.classList.add("flex");
+				modal.setAttribute("aria-hidden", "false");
+			}
+			if ((e.target as HTMLElement).closest("#profile-contact-close") || e.target === modal) {
+				modal.classList.add("hidden");
+				modal.classList.remove("flex");
+				modal.setAttribute("aria-hidden", "true");
+			}
+		});
+		const copyBtn = document.getElementById("profile-contact-copy");
+		if (copyBtn) {
+			copyBtn.addEventListener("click", () => {
+				navigator.clipboard
+					.writeText(currentValue)
+					.then(() => {
+						copyBtn.textContent = "已复制";
+						setTimeout(() => {
+							copyBtn.textContent = "复制号码";
+						}, 1500);
+					})
+					.catch(() => {});
+			});
+		}
+	}
+</script>

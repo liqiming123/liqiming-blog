@@ -1,0 +1,93 @@
+---
+// 评论区登录身份的前台桥（无 UI 纯逻辑组件，挂 <body> 直系跨 Swup 持久）：
+// 导航「管理」入口按 Artalk 登录身份显隐——Artalk token 经后台
+// /api/users/artalk-session 验证邮箱是否为后台管理员，是则签发后台会话，
+// 入口链接免登直通；游客 / 跳过验证 / 普通评论用户一律看不到入口。
+---
+
+<script>
+	// import.meta.env 在纯 Node 脚本（tsx）下不存在，防御式取值（navBarConfig 同款写法）
+	const ADMIN_URL = (import.meta.env?.PUBLIC_ADMIN_URL as string) || "/admin/";
+	const API_BASE = ADMIN_URL.startsWith("http") ? ADMIN_URL.replace(/\/+$/, "") : "";
+	const STATE_KEY = "ff_admin_state";
+
+	type ArtalkUserShape = { token?: string };
+	type AdminState = { atkToken: string; adminToken: string; ts: number } | null;
+
+	function readArtalkToken(): string {
+		try {
+			return (JSON.parse(localStorage.getItem("ArtalkUser") || "{}") as ArtalkUserShape).token || "";
+		} catch {
+			return "";
+		}
+	}
+
+	function readState(): AdminState {
+		try {
+			return JSON.parse(localStorage.getItem(STATE_KEY) || "null") as AdminState;
+		} catch {
+			return null;
+		}
+	}
+
+	// ===== 「管理」入口显隐 + 免登直通链接 =====
+	function applyNav(st: AdminState): void {
+		const show = !!st;
+		document.querySelectorAll<HTMLElement>("[data-requires-role]").forEach((el) => {
+			el.style.display = show && el.dataset.requiresRole === "admin" ? "" : "none";
+			if (show) {
+				el.querySelectorAll<HTMLAnchorElement>("a").forEach((a) => {
+					a.setAttribute("href", `${ADMIN_URL}#/auth?token=${st?.adminToken}`);
+				});
+			}
+		});
+	}
+
+	async function verifyAdmin(force = false): Promise<void> {
+		const token = readArtalkToken();
+		const st = readState();
+		if (!token) {
+			if (st) localStorage.removeItem(STATE_KEY);
+			applyNav(null);
+			return;
+		}
+		// Artalk token 未变且缓存未过期（1 小时）直接复用，避免每次翻页都打接口
+		if (!force && st && st.atkToken === token && Date.now() - st.ts < 3_600_000) {
+			applyNav(st);
+			return;
+		}
+		let next: AdminState = null;
+		try {
+			const res = await fetch(`${API_BASE}/api/users/artalk-session`, {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ token }),
+			});
+			const env = (await res.json()) as { flag?: boolean; data?: { admin?: boolean; token?: string } };
+			if (env?.flag && env.data?.admin && env.data?.token) {
+				next = { atkToken: token, adminToken: String(env.data.token), ts: Date.now() };
+			}
+		} catch {
+			/* 网络异常保持现有显隐 */
+		}
+		if (next) localStorage.setItem(STATE_KEY, JSON.stringify(next));
+		else localStorage.removeItem(STATE_KEY);
+		applyNav(next);
+	}
+
+	// ===== 登录态变化联动 =====
+	// Artalk.astro 在实例 user-changed 后派发 ff-user-changed；跨标签页走 storage 事件
+	window.addEventListener("ff-user-changed", () => void verifyAdmin(true));
+	window.addEventListener("storage", (e) => {
+		if (e.key === "ArtalkUser") void verifyAdmin(true);
+	});
+
+	// ===== Swup 换页后重刷显隐（导航 DOM 会被重建）=====
+	const reapply = () => applyNav(readState());
+	window.addEventListener("astro:page-load", reapply);
+	window.addEventListener("swup:contentReplaced", reapply);
+
+	// ===== 启动：缓存防闪 → 异步校准 =====
+	applyNav(readState());
+	void verifyAdmin();
+</script>

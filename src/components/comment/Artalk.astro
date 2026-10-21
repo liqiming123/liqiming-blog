@@ -39,6 +39,11 @@ const config = {
             // 初始化 Artalk
             const artalk = Artalk.init(effectiveConfig);
 
+            // 登录/登出联动前台：UserAuth.astro 监听该事件刷新「管理」入口显隐
+            artalk.on("user-changed", () => {
+                window.dispatchEvent(new CustomEvent("ff-user-changed"));
+            });
+
             // 深色模式
             function updateTheme() {
                 const isDark = document.documentElement.classList.contains('dark');

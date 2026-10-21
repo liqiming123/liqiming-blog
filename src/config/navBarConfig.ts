@@ -88,9 +88,6 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		url: "#",
 		icon: "material-symbols:info",
 		children: [
-			// 打赏
-			LinkPresets.Sponsor,
-
 			// 关于页面
 			LinkPresets.About,
 		],
@@ -104,7 +101,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		// 子菜单
 		children: [
 			{
-				name: "ai生成",
+				name: "ai生成网站",
 				url: "https://ai.liqiming.top/",
 				external: true,
 				icon: "material-symbols:auto-awesome",
@@ -129,6 +126,16 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 	// 	external: true,
 	// 	icon: "material-symbols:docs",
 	// });
+
+	// 管理后台入口：URL 来自 PUBLIC_ADMIN_URL（本地 dev 在 .env.development 指向 4322，
+	// 线上默认同域 /admin/）。防御式写法兼容纯 Node 脚本（tsx 下 import.meta.env 不存在）
+	// requireRole: 仅在评论区以管理员身份登录后由 UserAuth 脚本放行，游客/普通用户在 SSG 产物中即隐藏
+	links.push({
+		name: "管理",
+		url: (import.meta.env?.PUBLIC_ADMIN_URL as string) || "/admin/",
+		icon: "material-symbols:admin-panel-settings",
+		requireRole: "admin",
+	});
 
 	return { links } as NavBarConfig;
 };
@@ -227,12 +234,6 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/myanimelist/",
 		icon: "material-symbols:menu-book",
 		pageKey: "mal",
-	},
-	Sponsor: {
-		name: "打赏",
-		url: "/sponsor/",
-		icon: "material-symbols:favorite",
-		pageKey: "sponsor",
 	},
 	About: {
 		name: "关于我",

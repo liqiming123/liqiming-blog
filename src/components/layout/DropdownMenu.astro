@@ -22,7 +22,7 @@ const processedLink = link;
 const hasChildren = processedLink.children && processedLink.children.length > 0;
 ---
 
-<div class:list={["dropdown-container", className]} data-dropdown>
+<div class:list={["dropdown-container", className]} data-dropdown data-requires-role={link.requireRole} style={link.requireRole ? "display:none" : undefined}>
 	{hasChildren ? (
 		<button 
 			class="btn-plain scale-animation rounded-lg h-10 font-bold px-4 pr-8 active:scale-95 dropdown-trigger relative"
@@ -41,6 +41,7 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 				{processedLink.children?.map((child, index) => (
 					<DropdownItem
 						href={child.external ? child.url : url(child.url)}
+                        data-no-swup={child.url.startsWith("/admin") ? "" : undefined}
 						target={child.external ? "_blank" : undefined}
 						isLast={index === (processedLink.children?.length || 0) - 1}
 						class="dropdown-item focus-ring-inset h-10"
@@ -57,7 +58,8 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 	) : (
 		<a 
 			aria-label={processedLink.name} 
-			href={processedLink.external ? processedLink.url : url(processedLink.url)} 
+			href={processedLink.external ? processedLink.url : url(processedLink.url)}
+                        data-no-swup={processedLink.url.startsWith("/admin") ? "" : undefined} 
 			target={processedLink.external ? "_blank" : null}
 			class="btn-plain scale-animation rounded-lg h-10 font-bold px-4 active:scale-95"
 		>

@@ -6,6 +6,7 @@ import Footer from "@components/layout/Footer.astro";
 import HeaderTopRow from "@components/layout/HeaderTopRow.astro";
 import NavMenuPanel from "@components/layout/NavMenuPanel.astro";
 import SideBar from "@components/layout/SideBar.astro";
+import UserAuth from "@components/layout/UserAuth.astro";
 import type { MarkdownHeading } from "astro";
 import FloatingControls from "@/components/controls/FloatingControls.astro";
 import CategoryBar from "@/components/layout/CategoryBar.astro";
@@ -176,6 +177,9 @@ const {
 
 <!-- 移动端导航抽屉：渲染为 <body> 直系子元素，脱离导航栏的 transform 包含块才能铺满视口 -->
 <NavMenuPanel links={resolveNavMenuLinks()} />
+
+<!-- 评论区登录桥（纯逻辑）：导航「管理」入口仅对评论区管理员登录者可见 -->
+<UserAuth />
 
 <!--
     触屏设备上让代码块的复制按钮默认隐藏，点一下代码块才显形。

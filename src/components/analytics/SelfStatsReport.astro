@@ -1,0 +1,25 @@
+---
+// 自建访客统计上报（Admin 管理台的数据源）：
+// 每次页面访问 POST 一条 {path, title} 到 Admin server，服务端按 IP+UA 指纹做当日 UV 去重。
+// 只在设置了 PUBLIC_ADMIN_STATS_URL 时启用（本地开发在 .env.development 里配，
+// 生产等 Admin 部署到服务器后在环境变量/对应 env 文件里配 https://liqiming.top/api/v1/report）。
+const endpoint = import.meta.env.PUBLIC_ADMIN_STATS_URL as string | undefined;
+---
+
+{endpoint && (
+	<script is:inline define:vars={{ endpoint }}>
+		(() => {
+			try {
+				fetch(endpoint, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						path: location.pathname,
+						title: document.title.replace(/\s*[-–|·].*$/, ""),
+					}),
+					keepalive: true,
+				}).catch(() => {});
+			} catch (e) {}
+		})();
+	</script>
+)}
