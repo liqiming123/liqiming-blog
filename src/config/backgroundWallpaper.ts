@@ -122,6 +122,13 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 					showName: true,
 				},
 				{
+					// 项目集（千川投流系统 / AI Live 素材系统 / 大肥鱼 QQ 机器人等）
+					name: "我的项目",
+					icon: "material-symbols:rocket-launch-outline",
+					url: "/projects/",
+					showName: true,
+				},
+				{
 					// 原本指向 /archive/，改为自建的 AI 应用生成平台。
 					// showName 让文字和图标一起显示，和左边的「关于启明」保持一致
 					name: "ai生成网站",
