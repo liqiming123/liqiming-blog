@@ -250,13 +250,16 @@ html {
 
     /* 开启边框和阴影效果时的样式 */
     .enable-card-border .card-base {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border shadow-md;
+        border-color: color-mix(in srgb, var(--line-divider) 250%, currentColor) !important;
     }
     .enable-card-border .card-base-transparent {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border shadow-md;
+        border-color: color-mix(in srgb, var(--line-divider) 250%, currentColor) !important;
     }
     .enable-card-border .btn-card {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border shadow-md;
+        border-color: color-mix(in srgb, var(--line-divider) 250%, currentColor) !important;
     }
 
     /* 导航栏样式适配 */
