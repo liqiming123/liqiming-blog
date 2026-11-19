@@ -37,7 +37,7 @@
           <n-form-item path="username" :show-label="false">
             <n-input
               v-model:value="loginForm.username"
-              placeholder="请输入用户名"
+              placeholder="请输入邮箱"
               size="large"
               @keyup.enter="handleLogin"
             >
@@ -129,7 +129,7 @@ const loginForm = reactive({
 const rules = {
   username: {
     required: true,
-    message: '请输入用户名',
+    message: '请输入邮箱',
     trigger: ['blur', 'input']
   },
   password: {
