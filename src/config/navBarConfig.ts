@@ -129,12 +129,12 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 
 	// 管理后台入口：URL 来自 PUBLIC_ADMIN_URL（本地 dev 在 .env.development 指向 4322，
 	// 线上默认同域 /admin/）。防御式写法兼容纯 Node 脚本（tsx 下 import.meta.env 不存在）
-	// requireRole: 仅在评论区以管理员身份登录后由 UserAuth 脚本放行，游客/普通用户在 SSG 产物中即隐藏
+	// 常显入口：不再依赖 Artalk 评论登录身份，点击直接打开 /admin/ 后台登录页。
+	// 原 requireRole:"admin" 会让 SSG 产物默认 display:none、仅在评论区管理员登录后才放行，已移除。
 	links.push({
 		name: "管理",
 		url: (import.meta.env?.PUBLIC_ADMIN_URL as string) || "/admin/",
 		icon: "material-symbols:admin-panel-settings",
-		requireRole: "admin",
 	});
 
 	return { links } as NavBarConfig;
