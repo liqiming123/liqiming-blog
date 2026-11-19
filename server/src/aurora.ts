@@ -178,7 +178,8 @@ auroraRouter.post("/api/users/login", async (c) => {
 		return c.json(fail(500, "用户名或密码错误"), 200);
 	}
 	// 邮箱验证码二次校验：码发到站长邮箱，10 分钟内有效
-	if (mailer) {
+	// REQUIRE_LOGIN_CODE=0 可临时豁免（当前前端登录表单无验证码输入项，强制校验会恒失败）
+	if (mailer && process.env.REQUIRE_LOGIN_CODE !== "0") {
 		const pending = loginCodes.get(username);
 		const submitted = String(form.code || "");
 		if (!pending || pending.expires < Date.now() || submitted !== pending.code) {
@@ -308,7 +309,8 @@ auroraRouter.post("/api/users/artalk-session", async (c) => {
 });
 
 auroraRouter.get("/api/admin/users/info", (c) => {
-	const u = me(c)!;
+	const u = me(c);
+	if (!u) return c.json(fail(40001, "未登录"), 200);
 	const info = db.prepare("SELECT * FROM users WHERE id = ?").get(u.id) as any;
 	return c.json(
 		ok({
